@@ -3,6 +3,9 @@ import os
 import configparser
 from flask_pymongo import PyMongo
 from App.factory import create_app
+from App.db import get_faces
+from sklearn.neighbors import KNeighborsClassifier
+
 
 config = configparser.ConfigParser()
 config.read(os.path.abspath(os.path.join("config.ini")))

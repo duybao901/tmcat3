@@ -14,11 +14,8 @@ def get_db():
     Configuration method to return db instance
     """
     db = getattr(g, "_database", None)
-
     if db is None:
-
         db = g._database = PyMongo(current_app).db
-       
     return db
 
 
@@ -29,14 +26,23 @@ db = LocalProxy(get_db)
 #     image_array = db.Arra
 
 def add_face(face_embdding, label):
-    """
-    Inserts a comment into the comments collection, with the following fields:
-    - "name"
-    - "email"
-    - "movie_id"
-    - "text"
-    - "date"
-    Name and email must be retrieved from the "user" object.
+    """    
+    - "face_embdding"
+    - "label"
     """    
     face = { 'face_embdding' : face_embdding, "label": label}
-    return db.image_embeddings.insert_one(face)
+    return db.image_normalizes.insert_one(face)
+
+def get_faces():
+
+    faces_embeddings = []
+    labels = []
+    for doc in db.image_normalizes.find({}):
+        # print(doc.face_embdding)
+        faces_embeddings.append(doc["face_embdding"])
+        labels.append(doc["label"])
+    return faces_embeddings, labels
+
+def delete_image():
+    query = {"label":"pil"}
+    return db.image_normalizes.delete_many(query)
