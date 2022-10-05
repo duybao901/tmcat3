@@ -7,7 +7,6 @@ from flask_cors import CORS
 from bson import json_util, ObjectId
 from datetime import datetime
 
-
 from App.api.face import face_api_v1
 from App.db import get_faces
 
@@ -19,12 +18,9 @@ class MongoJsonEncoder(JSONEncoder):
             return str(obj)
         return json_util.default(obj, json_util.CANONICAL_JSON_OPTIONS)
 
-
-
 def create_app():
     app = Flask(__name__) 
     CORS(app)
     app.json_encoder = MongoJsonEncoder
     app.register_blueprint(face_api_v1)    
-
     return app
