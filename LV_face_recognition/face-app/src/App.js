@@ -1,7 +1,16 @@
+import React, { useState } from 'react'
 import './App.css';
-import FaceModel from './components/FaceModel/FaceModel';
+import Model from './components/FaceModel/Model';
+import Register from './components/Register/Register';
 
 function App() {
+
+  const [show, setShow] = useState(false)
+
+  const onHandleShowModel = () => {
+    setShow(true)
+  }
+
   return (
     <div className="App">
       <div style={{ padding: "50px" }}>
@@ -11,10 +20,12 @@ function App() {
           </h1>
         </div>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <button className='btn' style={{ marginRight: '10px' }}>Face register</button>
-          <button className='btn'>Face sign in</button>
+          <button className='btn' style={{ marginRight: '10px' }} onClick={onHandleShowModel}>Face Register</button>
+          <button className='btn'>Face Sign In</button>
         </div>
-        <FaceModel></FaceModel>
+        <Model show={show}>
+          <Register></Register>
+        </Model>
       </div>
     </div>
   );
