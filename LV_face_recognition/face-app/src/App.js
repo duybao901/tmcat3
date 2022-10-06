@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import './App.css';
-import Model from './components/FaceModel/Model';
+import Modal from './components/FaceModel/Modal';
 import Register from './components/Register/Register';
 
 function App() {
@@ -16,17 +16,17 @@ function App() {
       <div style={{ padding: "50px" }}>
         <div>
           <h1 style={{ marginBottom: "40px" }}>
-            Face Authentication using ReactJS
+            Xác thực khuôn mặt bằng ReactJS
           </h1>
         </div>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <button className='btn' style={{ marginRight: '10px' }} onClick={onHandleShowModel}>Face Register</button>
-          <button className='btn'>Face Sign In</button>
+          <button className='btn' style={{ marginRight: '10px' }} onClick={onHandleShowModel}>Đăng kí bằng khuôn mặt</button>
+          <button className='btn'>Đăng nhập bằng khuôn mặt</button>
         </div>
-        <Model show={show}>
-          <Register></Register>
-        </Model>
       </div>
+      <Modal show={show} setShow={setShow}>
+        <Register setShow={setShow}></Register>
+      </Modal>
     </div>
   );
 }
