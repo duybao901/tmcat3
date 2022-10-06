@@ -10,10 +10,8 @@
     color: #000;
     border: none;
     outline: none;
-    /* padding-right: 8px; */
+    margin-right: 8px;
     font-family: "Noto sans", sans-serif;
-    /* border: 2px solid transparent; */
-    /* padding-left: 2px; */
 
 }
 
@@ -24,6 +22,24 @@
 
 .modal__header input:focus {
     background-color: #f1f1f1;
+}
+
+.modal__header input:focus ~ label i{
+   color: var(--color-primary);
+   animation: rotate 2s ease-in-out infinite;
+}
+
+@keyframes rotate{
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+.modal__header label{
+    margin-top: 2px;
 }
 
 .register__user-name {
@@ -37,17 +53,28 @@
     cursor: pointer;
 }
 
-.register__user-name i:active{
+.register__user-name i:active {
     color: var(--color-primary);
 }
 
-.register__add-image .add-image__btn{
-    width: 80px;
-    height: 80px;
+.register__add-image .add-image__btn {
+    width: 70px;
+    height: 70px;
     padding: 10px;
 }
 
-.register__add-image .add-image__btn i{
+.register__add-image .add-image__btn:active {
+    border: 2px solid var(--color-primary);
+}
+
+.register__add-image .add-image__btn i {
     display: block;
-    font-size: 20px;
+    font-size: 24px;
+}
+
+.register__add-image .add-image__btn span {
+    font-size: 14px;
+    margin-top: 2px;
+    display: block;
+    font-weight: 500;
 }

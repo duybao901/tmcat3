@@ -6,6 +6,8 @@ const Register = ({ setShow }) => {
     const inputRef = useRef();
 
     const [userName, setUserName] = useState("username")
+    const [imageList, setImageList] = useState([])
+    const [typeAdd, setTypeAdd] = useState("")
 
     const onHandleChange = (e) => {
         setUserName(e.target.value)
@@ -19,39 +21,69 @@ const Register = ({ setShow }) => {
 
     return (
         <div>
-            <div className='face-modal__content'>
+            <div className='modal__content'>
                 <div className="modal__header">
                     <div className="register__user-name">
-                        <input id='username' ref={inputRef} className="face-modal__username" type="text" onChange={onHandleChange} value={userName} />
+                        <input id='username' ref={inputRef} className="modal__username" type="text" onChange={onHandleChange} value={userName} />
                         <label htmlFor='username'><i className='bx bx-pencil'></i></label>
                     </div>
-                    <div className='face-modal'>
-                        <i className='bx bx-x' onClick={() => setShow(false)}></i>
+                    <div className='modal__close' onClick={() => setShow(false)}>
+                        <i className='bx bx-x'></i>
                     </div>
                 </div>
                 <div className="modal__body">
-                    <div className="register__add-image">
-                        <span>Thêm ảnh khuôn mặt: </span>
-                        <div style={{ display: "flex", margin: "20px 0px" }}>
-                            <button style={{ marginRight: "10px" }} className='btn add-image__btn'>
+                    {
+                        typeAdd === "" ? <div className="register__add-image">
+                            <span>Thêm ảnh: </span>
+                            <div style={{ display: "flex", margin: "20px 0px" }}>
+                                <button style={{ marginRight: "10px" }} className='btn add-image__btn' onClick={() => setTypeAdd("webcam")}>
+                                    <div>
+                                        <i className='bx bx-camera'></i>
+                                        <span>
+                                            Webcam
+                                        </span>
+                                    </div>
+                                </button>
+                                <button className='btn add-image__btn' onClick={() => setTypeAdd("upload")}>
+                                    <div>
+                                        <i className='bx bx-upload'></i>
+                                        <span>
+                                            Upload
+                                        </span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div> : <div className="register__add-zone">
+                            <div className="add-zone__webcam">
                                 <div>
-                                    <i className='bx bx-camera'></i>
-                                    <span>
-                                        Webcam
-                                    </span>
+                                    <div>
+                                        <span>
+                                            Webcam
+                                        </span>
+                                        <i className='bx bx-x' onClick={() => setTypeAdd("")}></i>
+                                    </div>
+                                    {/* Camera */}
+                                    <div className="add-zone__camera">
+
+                                    </div>
+                                    
                                 </div>
-                            </button>
-                            <button className='btn add-image__btn'><div>
-                                <i className='bx bx-upload'></i>
+                            </div>
+                            <div>
                                 <span>
-                                    Upload
+                                    Ảnh:
                                 </span>
-                            </div></button>
+                                <div>
+
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    }
+
                 </div>
-                <div className="modal__bottom">
-                    <button onClick={() => setShow(false)}>close</button>
+                <div className="modal__bottom" style={{ display: "flex", justifyContent: "flex-end" }}>
+                    <button style={{ marginRight: "10px" }} className="btn btn--danger" onClick={() => setShow(false)}>Huỷ</button>
+                    <button className="btn btn--success" onClick={() => setShow(false)}>Đăng kí</button>
                 </div>
             </div>
         </div>

@@ -54,3 +54,24 @@
     border-top: 1px solid #dedede;
     border-bottom: 1px solid #dedede;
 }
+
+.modal__close{
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+}
+.modal__close:hover{
+    cursor: pointer;
+    background-color: #f1f1f1;
+}
+
+.modal__close:hover i {
+    color: var(--color-primary);
+}
+.modal__close i {
+    font-size: 24px;
+    color: #6e6d6d;
+}

@@ -21,7 +21,7 @@ def extract_face(filename, required_size=(160, 160)):
     # detect faces in the image
     results = detector.detect_faces(pixels)
 
-    if len(results) > 1 and results != []:
+    if len(results) > 1 or results == []:
         return [];
 
     # extract the bounding box from the first face
@@ -44,9 +44,10 @@ def load_faces(directory):
   # enumerate files
     for filename in listdir(directory):
     # path
-        path = directory + filename
+        path = directory + "/" + filename
         # get face
-        face = extract_face(path)			 
+        face = extract_face(path)	
+        		 
         if face != []:
             faces.append(face)
     return faces     
@@ -90,3 +91,5 @@ datagen_tf = ImageDataGenerator(
     # width_shift_range=0.2,
     # height_shift_range=0.2,
     horizontal_flip=True)
+
+# data = load_faces("./dataset/TRAIN_V8_100p_5i/Bao Dai")

@@ -29,3 +29,19 @@
 .btn:hover{
   background-color: #D2E3FC;
 }
+.btn.btn--danger{
+  background-color: #dd4d31;
+  color: #fff;
+}
+.btn.btn--danger:hover{
+  background-color: #ec5335;
+}
+
+.btn.btn--success{
+  background-color: #2db463;
+  color: #fff;
+}
+
+.btn.btn--success:hover{
+  background-color: #2fbe68;
+}
