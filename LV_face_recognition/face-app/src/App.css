@@ -38,10 +38,19 @@
 }
 
 .btn.btn--success{
-  background-color: #2db463;
+  background-color: var(--color-primary);
   color: #fff;
 }
 
 .btn.btn--success:hover{
-  background-color: #2fbe68;
+  background-color: var(--color-primary-light);
+}
+
+.btn.btn--disable{
+  background-color: #ddd;
+  cursor: default;
+}
+
+.btn.btn--disable:hover{
+  background-color: #ddd;
 }

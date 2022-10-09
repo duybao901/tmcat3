@@ -23,13 +23,13 @@
     opacity: 0;
 }
 
-.modal.show {
+/* .modal.show {
     opacity: 1;
     pointer-events: visible;
-}
+} */
 
 .modal__content {
-    width: 650px;
+    width: 590px;
     background-color: #fff;
     border-radius: 5px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
@@ -42,7 +42,7 @@
 }
 
 .modal__header {
-    padding: 18px;
+    padding: 16px;
 }
 
 .modal__bottom {
@@ -50,7 +50,7 @@
 }
 
 .modal__body {
-    padding: 10px;
+    /* padding: 10px; */
     border-top: 1px solid #dedede;
     border-bottom: 1px solid #dedede;
 }

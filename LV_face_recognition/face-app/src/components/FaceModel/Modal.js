@@ -22,7 +22,6 @@ const Modal = ({ children, show, setShow }) => {
             </div>
         </CSSTransition>,
         document.getElementById('root')
-
     )
 }
 

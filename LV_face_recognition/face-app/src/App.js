@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import './App.css';
+import FaceDetail from './components/FaceDetail/FaceDetail';
 import Modal from './components/FaceModel/Modal';
 import Register from './components/Register/Register';
 
@@ -27,6 +28,7 @@ function App() {
       <Modal show={show} setShow={setShow}>
         <Register setShow={setShow}></Register>
       </Modal>
+
     </div>
   );
 }

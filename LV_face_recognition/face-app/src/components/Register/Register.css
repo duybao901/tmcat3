@@ -12,6 +12,8 @@
     outline: none;
     margin-right: 8px;
     font-family: "Noto sans", sans-serif;
+    max-width: 400px;
+    overflow: hidden;
 
 }
 
@@ -24,21 +26,22 @@
     background-color: #f1f1f1;
 }
 
-.modal__header input:focus ~ label i{
-   color: var(--color-primary);
-   animation: rotate 2s ease-in-out infinite;
+.modal__header input:focus~label i {
+    color: var(--color-primary);
+    animation: rotate 2s ease-in-out infinite;
 }
 
-@keyframes rotate{
-    0%{
+@keyframes rotate {
+    0% {
         transform: rotate(0deg);
     }
-    100%{
+
+    100% {
         transform: rotate(360deg);
     }
 }
 
-.modal__header label{
+.modal__header label {
     margin-top: 2px;
 }
 
@@ -55,6 +58,10 @@
 
 .register__user-name i:active {
     color: var(--color-primary);
+}
+
+.register__add-image {
+    padding: 10px;
 }
 
 .register__add-image .add-image__btn {
@@ -77,4 +84,195 @@
     margin-top: 2px;
     display: block;
     font-weight: 500;
+}
+
+.register__add-zone {
+    display: flex;
+}
+
+.add-zone__webcam {
+    width: 50%;
+    background-color: #E8F0FE;
+    padding: 12px;
+}
+
+.add-zone__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.add-zone__head span {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+.add-zone__head i {
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--color-primary);
+    cursor: pointer;
+}
+
+.add-zone__camera {
+    height: 260px;
+    border-radius: 5px;
+    margin: 8px 0px 16px 0px;
+    overflow: hidden;
+}
+
+.add-zone__camera video {
+    border-radius: 5px;
+}
+
+.add-zone__control button {
+    background-color: var(--color-primary);
+    color: #fff;
+    width: 100%;
+}
+
+.add-zone__control button:hover {
+    background-color: var(--color-primary-light);
+}
+
+.add-zone__control button:active {
+    background-color: var(--color-primary-light-dark);
+    border: 1px solid black;
+}
+
+.add-zone__sample {
+    width: 50%;
+    max-height: 100%;
+}
+
+.add-zone__sample-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    margin-bottom: 8px;
+}
+
+.add-zone__sample-control .btn {
+    height: 30px;
+}
+
+.add-zone__sample span {
+    display: block;
+}
+
+.add-zone__captures {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -8px;
+    padding: 0px 10px;
+    max-height: 380px;
+    overflow-y: auto;
+
+}
+
+.add-zone__captures .add-zone__captures-item {
+    width: calc(25% - 8px);
+    height: 68px;
+    position: relative;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-left: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.add-zone__captures .add-zone__captures-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    z-index: 9;
+}
+
+.add-zone__captures .add-zone__captures-item i {
+    position: absolute;
+    color: #fff;
+    top: 2px;
+    left: 2px;
+    z-index: 10;
+    font-size: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all .12s ease-in-out;
+}
+
+.add-zone__captures .add-zone__captures-item i:hover {
+    color: cadetblue;
+}
+
+.add-zone__captures .add-zone__captures-item:hover i {
+    opacity: 1;
+    pointer-events: visible;
+}
+
+.add-zone__upload-file {
+    width: 50%;
+    background-color: #E8F0FE;
+}
+
+.add-zone__head {
+    padding: 10px;
+}
+
+.add-zone__upload-from {
+    background-color: #D2E3FC;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.add-zone__upload-from input {
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    padding: 15px;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.add-zone__upload-from input:hover+.add-zone__upload-from-text {
+    background-color: #aecbfa;
+}
+
+.add-zone__upload-from-text {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+    transition: all ease-in-out .1;
+}
+
+.add-zone__upload-from-text img {
+    height: 50px;
+    object-fit: cover;
+    margin: 10px auto;
+}
+
+
+.add-zone__upload-from-text i {
+    font-size: 24px;
+    color: var(--color-primary);
+    margin-bottom: 8px;
+}
+
+.add-zone__upload-from-text p {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-primary);
 }
