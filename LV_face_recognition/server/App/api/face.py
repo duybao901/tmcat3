@@ -6,7 +6,7 @@ from face_processing import extract_face, datagen, datagen_tf
 from utils import _load_model
 from sklearn.neighbors import KNeighborsClassifier
 from datetime import datetime
-from App.db import add_face, get_faces, delete_image
+from App.db import add_face, get_faces, delete_face
 from matplotlib import pyplot
 
 face_api_v1 = Blueprint(
@@ -118,9 +118,18 @@ def get_face():
   
   return jsonify({"msg":f"Get {len(faces)} success" })
 
-@face_api_v1.route("/delete", methods=["GET"])
+@face_api_v1.route("/test", methods=["GET"])
 def delete_face():
-  delete_image()     
-  return jsonify({"msg":f"delete success" })
+  return jsonify({"msg":f"hello world" })
+
+@face_api_v1.route("/delete_label", methods=["POST"])
+def delete_face_label():
+  if request.method == 'POST':    
+    userName = request.form['username']
+    if userName:    
+      delete_face(userName)     
+      return jsonify({"msg":f"delete {userName} success" }), 200 
+    else:
+      return jsonify({"msg":f"{userName} not found" }), 400   
 
 

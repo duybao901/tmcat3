@@ -1,0 +1,12 @@
+{
+  "name": "lv_face_recognition",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server": "cd server && flask run --no-debugger --port 5000",
+    "dev":"cd face-app && npm start"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -3,10 +3,12 @@ import "./Register.css"
 import Webcam from 'react-webcam'
 import FaceIcon from '../../images/face-icon.png'
 import FaceDetail from '../FaceDetail/FaceDetail'
+import axios from 'axios'
 
 const Register = ({ setShow }) => {
 
-
+    axios.get("/api/face/test").then(res => console.log(res)).catch(err => console.log(err))
+    
     const videoConstraints = {
         height: 260,
         facingMode: "user",
@@ -95,18 +97,18 @@ const Register = ({ setShow }) => {
     }
 
     function dataURLtoFile(dataurl, filename) {
- 
+
         var arr = dataurl.split(','),
             mime = arr[0].match(/:(.*?);/)[1],
-            bstr = atob(arr[1]), 
-            n = bstr.length, 
+            bstr = atob(arr[1]),
+            n = bstr.length,
             u8arr = new Uint8Array(n);
-            
-        while(n--){
+
+        while (n--) {
             u8arr[n] = bstr.charCodeAt(n);
         }
-        
-        return new File([u8arr], filename, {type:mime});
+
+        return new File([u8arr], filename, { type: mime });
     }
 
     const handleRegister = (e) => {
@@ -149,7 +151,7 @@ const Register = ({ setShow }) => {
 
         })
     }
-    
+
 
     return (
         <>

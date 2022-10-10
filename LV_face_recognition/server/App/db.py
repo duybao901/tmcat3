@@ -43,6 +43,11 @@ def get_faces():
         labels.append(doc["label"])
     return faces_embeddings, labels
 
-def delete_image():
-    query = {"label":"pil"}
+# def delete_image():
+#     query = {"label":"pil"}
+#     return db.image_normalizes.delete_many(query)
+
+
+def delete_face(face):
+    query = {"label":face}
     return db.image_normalizes.delete_many(query)
