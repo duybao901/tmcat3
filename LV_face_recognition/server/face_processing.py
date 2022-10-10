@@ -10,6 +10,7 @@ from PIL import Image # Pillow
 
 # extract faces in filename image
 def extract_face(filename, required_size=(160, 160)):
+    print(filename)
     # load image from file
     image = Image.open(filename)
     # convert to RGB, if needed

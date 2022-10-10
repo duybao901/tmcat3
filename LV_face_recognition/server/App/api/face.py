@@ -47,21 +47,24 @@ def train():
   if request.method == 'POST':
     _, labels = get_faces();
     user_name = request.form['user_name']
-    uploaded_files = request.files.getlist("file[]")
+    uploaded_files = request.files.getlist("file")
     faces = []
     label = []
+
+    # print(uploaded_files)
     
     if (len(list(filter (lambda x : x == user_name, labels))) > 0):
       return jsonify({"error": f"{user_name} is already exist" }), 400
 
     for file in uploaded_files:          
+      print(file)
       image_array = extract_face(file, required_size=(160, 160))
       if len(image_array) >= 1:
         faces.append(image_array)
         label.append(user_name)
       else:
         return jsonify({"msg": f"File {file} is so many people", }), 400
-
+ 
     datagen.fit(faces)
     X_au = []
     y_au = []
@@ -82,11 +85,13 @@ def train():
     print(newTrainX.shape)
 
     newTrainX = Knn.normalize_input_vectors(newTrainX)
+    print(newTrainX.shape)
 
-    for i in range(len(newTrainX)):    
-      add_face(newTrainX[i].tolist() , user_name) 
+    # Add to database
+    # for i in range(len(newTrainX)):    
+    #   add_face(newTrainX[i].tolist() , user_name) 
 
-    return jsonify({"msg": f"Training {user_name} success" })
+    return jsonify({"msg": f"Training {user_name} success"})
 
 @face_api_v1.route("/init_data", methods=["GET"])
 def init_data():  
@@ -118,9 +123,9 @@ def get_face():
   
   return jsonify({"msg":f"Get {len(faces)} success" })
 
-@face_api_v1.route("/test", methods=["GET"])
-def delete_face():
-  return jsonify({"msg":f"hello world" })
+# @face_api_v1.route("/test", methods=["GET"])
+# def delete_face():
+#   return jsonify({"msg":f"hello world" })
 
 @face_api_v1.route("/delete_label", methods=["POST"])
 def delete_face_label():

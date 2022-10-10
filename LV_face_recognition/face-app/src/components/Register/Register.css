@@ -276,3 +276,90 @@
     font-weight: 500;
     color: var(--color-primary);
 }
+
+
+.register__wrapper {
+    position: relative;
+}
+
+.register__fade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, .5);
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+}
+
+.register__loading {
+    position: absolute;
+    z-index: 21;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    /* height: 300px;
+    width: 300px; */
+}
+.register__loading-circle{
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+} 
+
+.register__loading-circle::after,
+.register__loading-circle::before {
+
+    border-width: 2px;
+    position: absolute;
+    content: '';
+    border: 3px solid rgba(122, 185, 255, 0.3);
+    border-radius: 50%;  
+}
+
+.register__loading-circle::after {
+    top: 35px;
+    left: 35px;
+    bottom: 35px;
+    right: 35px;
+    animation: circleRotate_A 2s ease-in-out infinite;
+    border-top-color: #16a4fd;
+    border-bottom-color: #16a4fd;
+}
+
+.register__loading-circle::before {
+    border-top-color: #16a4fd;
+    border-right-color: #16a4fd;
+    top: 10px;
+    left: 10px;
+    bottom: 10px;
+    right: 10px;
+    animation: circleRotate_B 4s linear infinite;
+}
+
+@keyframes circleRotate_A {
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes circleRotate_B {
+    0%{
+        transform: rotate(360deg);
+    }
+    100%{
+        transform: rotate(0deg);
+    }
+}
+
+.register__loading img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}

@@ -2,13 +2,13 @@ import React, { useState, useRef, useEffect, useCallback } from 'react'
 import "./Register.css"
 import Webcam from 'react-webcam'
 import FaceIcon from '../../images/face-icon.png'
+import FaceIcon2 from '../../images/face-icon2.png'
+
 import FaceDetail from '../FaceDetail/FaceDetail'
 import axios from 'axios'
 
 const Register = ({ setShow }) => {
 
-    axios.get("/api/face/test").then(res => console.log(res)).catch(err => console.log(err))
-    
     const videoConstraints = {
         height: 260,
         facingMode: "user",
@@ -28,6 +28,7 @@ const Register = ({ setShow }) => {
     const [second, setSecond] = useState(0)
     const [secondInterval, setSecondInterval] = useState(0)
     const [showFaceDetail, setShowFaceDetail] = useState({})
+    const [loading, setLoading] = useState(false)
 
     const onHandleChange = (e) => {
         setUserName(e.target.value)
@@ -111,16 +112,42 @@ const Register = ({ setShow }) => {
         return new File([u8arr], filename, { type: mime });
     }
 
-    const handleRegister = (e) => {
+    const handleRegister = async (e) => {
+        e.preventDefault();
 
         const newImageListFile = imageList.map(item => {
             return dataURLtoFile(item, userName);
         })
 
+
         const newListSample = newImageListFile.concat(imageListFile)
         console.table(newListSample)
-        // var file = dataURLtoFile(newListSample[0], userName);
-        // console.log(file);
+
+        const formData = new FormData();
+        for (let i = 0; i < newListSample.length; i++) {
+            formData.append("file", newListSample[i]);
+        }
+
+
+        // formData.files("files", newListSample)
+        // formData.append("files", newListSample);
+        formData.append("user_name", userName)
+
+        try {
+            setLoading(true)
+            const res = await axios.post("/api/face/train", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            console.log(res)
+            setLoading(false)
+
+        } catch (error) {
+            setLoading(false)
+            console.log(error.response.data.msg)
+        }
+
     }
 
     const deleteSample = (i) => {
@@ -148,13 +175,22 @@ const Register = ({ setShow }) => {
         setShowFaceDetail({
             [`showface-list-file${faceIndex}`]: fileClick,
             [`showface-list${faceIndex}`]: cameraClick,
-
         })
     }
 
 
     return (
-        <>
+        <div className="register__wrapper">
+            {
+                loading && <div className="register__fade"></div>
+            }
+            {
+                loading && <div className="register__loading">
+                    <div className="register__loading-circle">
+                    </div>
+                    <img src={FaceIcon} alt='face-icon-loading'></img>
+                </div>
+            }
             <div className="modal__header">
                 <div className="register__user-name">
                     <input id='username' ref={inputRef} className="modal__username" type="text" onChange={onHandleChange} value={userName} />
@@ -301,12 +337,14 @@ const Register = ({ setShow }) => {
             </div>
             <div className="modal__bottom" style={{ display: "flex", justifyContent: "flex-end" }}>
                 <button style={{ marginRight: "10px" }} className="btn btn--danger" onClick={() => setShow(false)}>Huỷ</button>
-                <button
-                    disabled={imageList.length === 0 || recoding ? true : false}
-                    className={`btn btn--success ${imageList.length === 0 || recoding ? "btn--disable" : ""}`}
-                    onClick={handleRegister}>Đăng kí</button>
+                <form onSubmit={handleRegister} encType="multipart/form-data">
+                    <button
+                        disabled={imageList.length + imageListFile.length === 0 || recoding || loading ? true : false}
+                        className={`btn btn--success ${imageList.length + imageListFile.length === 0 || recoding || loading ? "btn--disable" : ""}`}
+                        type="submit">Đăng kí</button>
+                </form>
             </div>
-        </>
+        </div>
 
     )
 }

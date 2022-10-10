@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "cd server && flask run --no-debugger --port 5000",
+    "server": "cd server && py ./app.py --port 5000",
     "dev":"cd face-app && npm start"
   },
   "author": "",
