@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import './App.css';
 import Modal from './components/FaceModel/Modal';
 import Register from './components/Register/Register';
+import { ToastContainer , toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
@@ -10,7 +12,8 @@ function App() {
   const onHandleShowModel = () => {
     setShow(true)
   }
-
+  
+  const notify = () => toast("Wow so easy!");
   return (
     <div className="App">
       <div style={{ padding: "50px" }}>
@@ -27,7 +30,19 @@ function App() {
       <Modal show={show} setShow={setShow}>
         <Register setShow={setShow}></Register>
       </Modal>
-
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+      <button onClick={notify}>Notify!</button>
     </div>
   );
 }

@@ -2,10 +2,10 @@ import React, { useState, useRef, useEffect, useCallback } from 'react'
 import "./Register.css"
 import Webcam from 'react-webcam'
 import FaceIcon from '../../images/face-icon.png'
-import FaceIcon2 from '../../images/face-icon2.png'
 
 import FaceDetail from '../FaceDetail/FaceDetail'
 import axios from 'axios'
+import { toast } from "react-toastify"
 
 const Register = ({ setShow }) => {
 
@@ -23,7 +23,6 @@ const Register = ({ setShow }) => {
     const [imageListFile, setImageListFile] = useState([])
     const [recoding, setRecording] = useState(false)
     const [typeAdd, setTypeAdd] = useState("")
-    const [showModelFaceDetail, setShowModalFaceDtail] = useState(true)
     const [autoCapture, setAutoCapture] = useState(null)
     const [second, setSecond] = useState(0)
     const [secondInterval, setSecondInterval] = useState(0)
@@ -41,6 +40,13 @@ const Register = ({ setShow }) => {
     }, [userName])
 
     const capture = () => {
+
+        const newListSample = imageList.concat(imageListFile)
+        if (newListSample.length > 15) {
+            toast.warning("Số ảnh phải lớn hơn 10 và tối đa 15 ảnh")
+            return;
+        }
+
         setRecording(true)
         var i = 0;
         var interval = setInterval(() => {
@@ -62,6 +68,7 @@ const Register = ({ setShow }) => {
 
         setAutoCapture(interval)
         setSecondInterval(intervalSecond)
+
     }
 
     useEffect(() => {
@@ -77,15 +84,22 @@ const Register = ({ setShow }) => {
     }
 
     const onHandleChangeFile = (e) => {
+        
         const target = e.target
         const files = target.files;
+
+        const newListSample = imageList.concat(imageListFile)
+        if (newListSample.length + files.length > 15) {
+            toast.warning("Số ảnh phải lớn hơn 10 và tối đa 15 ảnh")
+            return;
+        }
+
         if (files?.length !== 0 && files !== null) {
             setImageListFile(prevImageListFile => {
                 return [...prevImageListFile, ...files]
             })
         }
     }
-
 
     const handleDragFile = (e) => {
         // const target = e.target
@@ -115,37 +129,49 @@ const Register = ({ setShow }) => {
     const handleRegister = async (e) => {
         e.preventDefault();
 
+        const isNullSample = imageList.every(element => element === null);
+
+        if(isNullSample){
+            toast.warning("Một số ảnh không hợp lệ")
+            return;
+        }
+
         const newImageListFile = imageList.map(item => {
             return dataURLtoFile(item, userName);
         })
 
-
         const newListSample = newImageListFile.concat(imageListFile)
         console.table(newListSample)
 
+        const totalImage = newListSample.length;
+        console.log(totalImage)
+
+        if (totalImage < 10 || totalImage > 20) {
+            toast.warning("Số ảnh phải lớn hơn 10 và tối đa 15 ảnh")
+            return;
+        }
+
         const formData = new FormData();
-        for (let i = 0; i < newListSample.length; i++) {
+        for (let i = 0; i < totalImage; i++) {
             formData.append("file", newListSample[i]);
         }
 
-
         // formData.files("files", newListSample)
         // formData.append("files", newListSample);
-        formData.append("user_name", userName)
+        formData.append("user_name", userName.trim().toLocaleLowerCase())
 
         try {
             setLoading(true)
-            const res = await axios.post("/api/face/train", formData, {
+            const res = await axios.post("http://localhost:5000/api/face/train", formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             })
-            console.log(res)
             setLoading(false)
-
+            toast.success(res.data.msg)
         } catch (error) {
             setLoading(false)
-            console.log(error.response.data.msg)
+            toast.warning(error.response.data.msg)
         }
 
     }
@@ -247,7 +273,7 @@ const Register = ({ setShow }) => {
                                             </Webcam>
                                         </div>
                                         <div className="add-zone__control">
-                                            <button className='btn' onClick={capture}>
+                                            <button disabled={recoding ? true : false} className={`btn ${recoding && "btn--disable"}`} onClick={capture}>
                                                 {
                                                     !recoding ? "Record 2 Second" : `Reconding in ${second}s...`
                                                 }

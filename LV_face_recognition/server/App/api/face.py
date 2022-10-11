@@ -45,26 +45,25 @@ def predict():
 @face_api_v1.route("/train", methods=["POST"])
 def train():
   if request.method == 'POST':
-    _, labels = get_faces();
     user_name = request.form['user_name']
     uploaded_files = request.files.getlist("file")
     faces = []
     label = []
-
-    # print(uploaded_files)
     
-    if (len(list(filter (lambda x : x == user_name, labels))) > 0):
-      return jsonify({"error": f"{user_name} is already exist" }), 400
-
-    for file in uploaded_files:          
-      print(file)
+    for file in uploaded_files:       
       image_array = extract_face(file, required_size=(160, 160))
       if len(image_array) >= 1:
         faces.append(image_array)
         label.append(user_name)
       else:
-        return jsonify({"msg": f"File {file} is so many people", }), 400
- 
+        return jsonify({"msg": f"File {file.filename} có quá nhiều người", }), 400
+    
+    _, labels = get_faces();
+    
+    if (len(list(filter (lambda x : x == user_name, labels))) > 0):
+      return jsonify({"msg": f"{user_name} đã tồn tại" }), 400
+
+    
     datagen.fit(faces)
     X_au = []
     y_au = []
@@ -74,7 +73,7 @@ def train():
         X_au.append(x[0])
         y_au.append(label[i])
         no_img += 1
-        if no_img == 16:
+        if no_img == 6:
           break
 
     newTrainX = list()
@@ -82,16 +81,14 @@ def train():
       embedding = Knn.get_embedding(facenet_keras_model, face_pixels)
       newTrainX.append(embedding)
     newTrainX = np.asarray(newTrainX)
-    print(newTrainX.shape)
 
     newTrainX = Knn.normalize_input_vectors(newTrainX)
-    print(newTrainX.shape)
 
     # Add to database
-    # for i in range(len(newTrainX)):    
-    #   add_face(newTrainX[i].tolist() , user_name) 
+    for i in range(len(newTrainX)):    
+      add_face(newTrainX[i].tolist() , user_name) 
 
-    return jsonify({"msg": f"Training {user_name} success"})
+    return jsonify({"msg": f"Đăng kí thành công"})
 
 @face_api_v1.route("/init_data", methods=["GET"])
 def init_data():  
