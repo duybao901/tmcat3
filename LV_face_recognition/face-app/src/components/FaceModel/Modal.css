@@ -76,3 +76,12 @@
     font-size: 24px;
     color: #6e6d6d;
 }
+
+.modal__title{
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.modal__title span{
+    color: var(--color-primary);
+}

@@ -2,17 +2,16 @@ import React, { useState } from 'react'
 import './App.css';
 import Modal from './components/FaceModel/Modal';
 import Register from './components/Register/Register';
-import { ToastContainer , toast} from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Login from './components/Login/Login';
 
 function App() {
 
-  const [show, setShow] = useState(false)
+  const [showRegister, setShowRegister] = useState(false)
+  const [showLogin, setShowLogin] = useState(false)
 
-  const onHandleShowModel = () => {
-    setShow(true)
-  }
-  
+
   const notify = () => toast("Wow so easy!");
   return (
     <div className="App">
@@ -23,16 +22,21 @@ function App() {
           </h1>
         </div>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <button className='btn' style={{ marginRight: '10px' }} onClick={onHandleShowModel}>Đăng kí bằng khuôn mặt</button>
-          <button className='btn'>Đăng nhập bằng khuôn mặt</button>
+          <button className='btn' style={{ marginRight: '10px' }} onClick={() => setShowRegister(true)}>Đăng kí bằng khuôn mặt</button>
+          <button className='btn' onClick={() => setShowLogin(true)}>Đăng nhập bằng khuôn mặt</button>
         </div>
       </div>
-      <Modal show={show} setShow={setShow}>
-        <Register setShow={setShow}></Register>
+      <Modal show={showRegister} setShow={setShowRegister}>
+        <Register setShow={setShowRegister}></Register>
       </Modal>
+
+      <Modal show={showLogin} setShow={setShowLogin}>
+        <Login setShow={setShowLogin}></Login>
+      </Modal>
+
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

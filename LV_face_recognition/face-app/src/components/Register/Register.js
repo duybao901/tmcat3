@@ -42,7 +42,7 @@ const Register = ({ setShow }) => {
     const capture = () => {
 
         const newListSample = imageList.concat(imageListFile)
-        if (newListSample.length > 15) {
+        if (newListSample.length >= 15) {
             toast.warning("Số ảnh phải lớn hơn 10 và tối đa 15 ảnh")
             return;
         }
@@ -51,7 +51,7 @@ const Register = ({ setShow }) => {
         var i = 0;
         var interval = setInterval(() => {
             i += 100;
-            if (i <= 2000) {
+            if (i <= 1500) {
                 const imageSrc = webcamRef.current.getScreenshot();
                 setImageList(prevImageList => [...prevImageList, imageSrc])
             } else {
@@ -89,7 +89,7 @@ const Register = ({ setShow }) => {
         const files = target.files;
 
         const newListSample = imageList.concat(imageListFile)
-        if (newListSample.length + files.length > 15) {
+        if (newListSample.length + files.length >= 15) {
             toast.warning("Số ảnh phải lớn hơn 10 và tối đa 15 ảnh")
             return;
         }
@@ -146,7 +146,7 @@ const Register = ({ setShow }) => {
         const totalImage = newListSample.length;
         console.log(totalImage)
 
-        if (totalImage < 10 || totalImage > 20) {
+        if (totalImage < 10 || totalImage > 15) {
             toast.warning("Số ảnh phải lớn hơn 10 và tối đa 15 ảnh")
             return;
         }
@@ -160,19 +160,19 @@ const Register = ({ setShow }) => {
         // formData.append("files", newListSample);
         formData.append("user_name", userName.trim().toLocaleLowerCase())
 
-        try {
-            setLoading(true)
-            const res = await axios.post("http://localhost:5000/api/face/train", formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
-            setLoading(false)
-            toast.success(res.data.msg)
-        } catch (error) {
-            setLoading(false)
-            toast.warning(error.response.data.msg)
-        }
+        // try {
+        //     setLoading(true)
+        //     const res = await axios.post("http://localhost:5000/api/face/train", formData, {
+        //         headers: {
+        //             'Content-Type': 'multipart/form-data'
+        //         }
+        //     })
+        //     setLoading(false)
+        //     toast.success(res.data.msg)
+        // } catch (error) {
+        //     setLoading(false)
+        //     toast.warning(error.response.data.msg)
+        // }
 
     }
 
@@ -269,7 +269,6 @@ const Register = ({ setShow }) => {
                                                 ref={webcamRef}
                                                 screenshotQuality={1}
                                             >
-
                                             </Webcam>
                                         </div>
                                         <div className="add-zone__control">
