@@ -12,6 +12,7 @@ const Login = ({ setShow }) => {
     const [loadingmodel, setLoadingModel] = useState(false);
     const [refVideo, setRefVideo] = useState()
     const [timer, setTimer] = useState()
+    const [totalScore, setTotalScore] = useState()
 
     const videoConstraints = {
         facingMode: "user",
@@ -30,22 +31,21 @@ const Login = ({ setShow }) => {
                     //   faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URI) // Pre-trained model dùng để nhận dạng gương mặt.
                 ]
             )
-
+            console.log("Loading model success")
             setLoadingModel(true)
         }
         loadModel()
     }, [])
 
     useEffect(() => {
-        if (refWebcam) {
+        if (refWebcam && loadingmodel) {
             setRefVideo(refWebcam.current.video)
         }
-    }, [refWebcam])
+    }, [refWebcam, loadingmodel])
 
 
     const hanldeCameraPlay = async (e) => {
         if (loadingmodel) {
-
             const timerPlay = setInterval(async () => {
                 if (refVideo) {
                     refCanvas.current.interHTML = faceapi.createCanvasFromMedia(refVideo)
@@ -65,11 +65,16 @@ const Login = ({ setShow }) => {
                 }
 
                 const score = resizeDetections._score
-                console.log(score)
+
+                if (score > 0.5) {
+
+                }
 
                 // Ve
                 faceapi.draw.drawDetections(refCanvas.current, resizeDetections) // Ve o vuong phat hien
-            }, 259)
+
+
+            }, 500)
 
             setTimer(timerPlay)
         }
@@ -77,9 +82,7 @@ const Login = ({ setShow }) => {
 
 
     useEffect(() => {
-
         return () => {
-            console.log(timer)
             clearInterval(timer)
         }
     }, [timer])
@@ -99,16 +102,18 @@ const Login = ({ setShow }) => {
             </div>
             <div className="modal__body">
                 <div className="login__webcam">
-                    <Webcam
-                        audio={false}
-                        screenshotFormat="image/jpeg"
-                        width={"100%"}
-                        videoConstraints={videoConstraints}
-                        ref={refWebcam}
-                        screenshotQuality={1}
-                        onPlay={hanldeCameraPlay}
-                    >
-                    </Webcam>
+                    {
+                        <Webcam
+                            audio={false}
+                            screenshotFormat="image/jpeg"
+                            width={"100%"}
+                            videoConstraints={videoConstraints}
+                            ref={refWebcam}
+                            screenshotQuality={1}
+                            onPlay={hanldeCameraPlay}
+                        >
+                        </Webcam>
+                    }
                     <canvas ref={refCanvas}></canvas>
                 </div>
             </div>

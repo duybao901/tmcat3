@@ -1,30 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import './App.css';
 import Modal from './components/FaceModel/Modal';
 import Register from './components/Register/Register';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Login from './components/Login/Login';
-import axios from 'axios';
 
 function App() {
 
   const [showRegister, setShowRegister] = useState(false)
   const [showLogin, setShowLogin] = useState(false)
-
-  useEffect(() => {
-    const login = async () => {
-      try {
-        const res = await axios.post("https://infinite-beach-99697.herokuapp.com/api/login")
-        console.log(res)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-    login()
-  }, [])
-
 
   const notify = () => toast("Wow so easy!");
   return (
