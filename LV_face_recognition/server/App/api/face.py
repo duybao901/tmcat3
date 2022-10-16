@@ -22,7 +22,7 @@ Knn = KnnClass()
 def predict():  
   if request.method == 'POST':          
     # Lấy file ảnh người dùng upload lên
-    image = request.files["image"]
+    image = request.files["file"]
     if image:
       # Extract feature
       image_array = extract_face(image, required_size=(160, 160))      
@@ -36,11 +36,11 @@ def predict():
         image_embbeding = Knn.normalize_input_vectors([image_embbeding])  
         # Predict
         y_predict_test = knn_model.predict([image_embbeding[0]])
-        return jsonify({"Label": y_predict_test[0]}), 200
+        return jsonify({"username": y_predict_test[0]}), 200
       else:
         return jsonify({"msg": "File is so many people", }), 400
     else: 
-      return jsonify({"error": "File not found", }), 400    
+      return jsonify({"msg": "File not found", }), 400    
 
 @face_api_v1.route("/train", methods=["POST"])
 def train():
@@ -63,7 +63,11 @@ def train():
     if (len(list(filter (lambda x : x == user_name, labels))) > 0):
       return jsonify({"msg": f"{user_name} đã tồn tại" }), 400
 
-    
+    numberGenerator = 16;
+
+    if(len(faces) > 6):
+      numberGenerator = 11
+          
     datagen.fit(faces)
     X_au = []
     y_au = []
@@ -73,7 +77,7 @@ def train():
         X_au.append(x[0])
         y_au.append(label[i])
         no_img += 1
-        if no_img == 6:
+        if no_img == numberGenerator:
           break
 
     newTrainX = list()

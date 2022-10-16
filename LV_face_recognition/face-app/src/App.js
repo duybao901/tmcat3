@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './App.css';
 import Modal from './components/FaceModel/Modal';
 import Register from './components/Register/Register';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Login from './components/Login/Login';
 
@@ -11,7 +11,6 @@ function App() {
   const [showRegister, setShowRegister] = useState(false)
   const [showLogin, setShowLogin] = useState(false)
 
-  const notify = () => toast("Wow so easy!");
   return (
     <div className="App">
       <div style={{ padding: "50px" }}>
@@ -45,7 +44,6 @@ function App() {
         pauseOnHover
         theme="colored"
       />
-      <button onClick={notify}>Notify!</button>
     </div>
   );
 }

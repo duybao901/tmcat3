@@ -11,6 +11,7 @@
 
 .modal__body{
     padding: 10px;
+    position: relative;
 }
 .login__webcam{
     position: relative;
@@ -21,4 +22,24 @@
     height: 475px;
     top: 0;
     left: 0;
+}
+
+.register__fade{
+    background-color: rgba(255, 255, 255, 1) !important;
+}
+
+.register__loading-circle p{
+    position: absolute;
+    bottom: -12%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 15px;
+    font-weight: 600;
+    width: 100%;
+    text-align: center;
+    color: var(--color-primary);
+}
+
+.register__fade.register__fade-800{
+    background-color: rgba(255, 255, 255,.8) !important;
 }

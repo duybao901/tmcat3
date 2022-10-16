@@ -42,23 +42,23 @@ const Register = ({ setShow }) => {
     const capture = () => {
 
         const newListSample = imageList.concat(imageListFile)
-        if (newListSample.length >= 15) {
-            toast.warning("Số ảnh phải lớn hơn 10 và tối đa 15 ảnh")
+        if (newListSample.length >= 8) {
+            toast.warning("Số ảnh phải lớn hơn 4 và tối đa 8 ảnh")
             return;
         }
 
         setRecording(true)
         var i = 0;
         var interval = setInterval(() => {
-            i += 100;
-            if (i <= 1500) {
+            i += 250;
+            if (i <= 2000) {
                 const imageSrc = webcamRef.current.getScreenshot();
                 setImageList(prevImageList => [...prevImageList, imageSrc])
             } else {
                 setRecording(false)
                 setSecond(0)
             }
-        }, 100)
+        }, 250)
 
         setAutoCapture(interval)
 
@@ -89,8 +89,8 @@ const Register = ({ setShow }) => {
         const files = target.files;
 
         const newListSample = imageList.concat(imageListFile)
-        if (newListSample.length + files.length >= 15) {
-            toast.warning("Số ảnh phải lớn hơn 10 và tối đa 15 ảnh")
+        if (newListSample.length + files.length >= 8) {
+            toast.warning("Số ảnh phải lớn hơn 4 và tối đa 8 ảnh")
             return;
         }
 
@@ -144,10 +144,9 @@ const Register = ({ setShow }) => {
         console.table(newListSample)
 
         const totalImage = newListSample.length;
-        console.log(totalImage)
 
-        if (totalImage < 10 || totalImage > 15) {
-            toast.warning("Số ảnh phải lớn hơn 10 và tối đa 15 ảnh")
+        if (totalImage < 4 || totalImage > 8) {
+            toast.warning("Số ảnh phải lớn hơn 4 và tối đa 8 ảnh")
             return;
         }
 
