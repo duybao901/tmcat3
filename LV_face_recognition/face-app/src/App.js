@@ -1,37 +1,34 @@
 import React, { useState } from 'react'
 import './App.css';
-import Modal from './components/FaceModel/Modal';
-import Register from './components/Register/Register';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Login from './components/Login/Login';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link
+} from "react-router-dom";
+import RegisterPage from './pages/RegisterPage';
+import LoginPage from './pages/LoginPage';
 
 function App() {
-
-  const [showRegister, setShowRegister] = useState(false)
-  const [showLogin, setShowLogin] = useState(false)
-
   return (
     <div className="App">
-      <div style={{ padding: "50px" }}>
-        <div>
-          <h1 style={{ marginBottom: "40px" }}>
-            Xác thực khuôn mặt bằng ReactJS
-          </h1>
-        </div>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <button className='btn' style={{ marginRight: '10px' }} onClick={() => setShowRegister(true)}>Đăng kí bằng khuôn mặt</button>
-          <button className='btn' onClick={() => setShowLogin(true)}>Đăng nhập bằng khuôn mặt</button>
-        </div>
-      </div>
-      <Modal show={showRegister} setShow={setShowRegister}>
-        <Register setShow={setShowRegister}></Register>
-      </Modal>
+      {/* <div style={{ marginBottom: "20px" }}>
+        <Link to="/register" style={{ marginRight: "10px" }}>Register</Link>
+        <Link to="/login">Login</Link>
+      </div> */}
 
-      <Modal show={showLogin} setShow={setShowLogin}>
-        <Login setShow={setShowLogin}></Login>
-      </Modal>
+      <Routes>
+        {/* Register Page */}
+        <Route path="/register" element={<RegisterPage />}>
+        </Route>
 
+        {/* Login Page */}
+        <Route path="/login" element={<LoginPage />}>
+        </Route>
+
+      </Routes>
       <ToastContainer
         position="top-right"
         autoClose={3000}

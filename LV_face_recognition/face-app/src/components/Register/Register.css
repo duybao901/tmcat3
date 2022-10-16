@@ -116,7 +116,6 @@
 }
 
 .add-zone__camera {
-    height: 260px;
     border-radius: 5px;
     margin: 8px 0px 16px 0px;
     overflow: hidden;
@@ -362,4 +361,10 @@
     width: 40px;
     height: 40px;
     object-fit: cover;
+}
+
+.register__wrapper{
+    background-color: #fff;
+    width: 100%;
+    border-radius: 4px;
 }

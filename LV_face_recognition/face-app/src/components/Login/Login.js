@@ -6,7 +6,7 @@ import Webcam from 'react-webcam'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
-const Login = ({ setShow }) => {
+const Login = () => {
 
     const refWebcam = useRef()
     const refCanvas = useRef()
@@ -21,7 +21,7 @@ const Login = ({ setShow }) => {
 
     const videoConstraints = {
         facingMode: "user",
-        aspectRatio: 1.2
+        aspectRatio: 1
     };
 
     useEffect(() => {
@@ -51,40 +51,40 @@ const Login = ({ setShow }) => {
 
     const hanldeCameraPlay = async (e) => {
         if (loadingmodel) {
-            const timerPlay = setInterval(async () => {
-                if (refVideo) {
-                    refCanvas.current.interHTML = faceapi.createCanvasFromMedia(refVideo)
-                }
+            // const timerPlay = setInterval(async () => {
+            //     if (refVideo) {
+            //         refCanvas.current.interHTML = faceapi.createCanvasFromMedia(refVideo)
+            //     }
 
-                const displaySize = {
-                    width: 640, height: 480
-                }
-                faceapi.matchDimensions(refCanvas.current, displaySize)
+            //     const displaySize = {
+            //         width: 640, height: 480
+            //     }
+            //     faceapi.matchDimensions(refCanvas.current, displaySize)
 
-                const detection = await faceapi.detectSingleFace(refVideo, new faceapi.SsdMobilenetv1Options)
+            //     const detection = await faceapi.detectSingleFace(refVideo, new faceapi.SsdMobilenetv1Options)
 
-                if (detection) {
-                    setFirstDetection(true);
-                    const resizeDetections = faceapi.resizeResults(detection, displaySize)
+            //     if (detection) {
+            //         setFirstDetection(true);
+            //         const resizeDetections = faceapi.resizeResults(detection, displaySize)
 
-                    // Xoa cac canvas truoc
-                    if (refCanvas.current) {
-                        refCanvas.current.getContext('2d').clearRect(0, 0, 640, 480)
-                    }
+            //         // Xoa cac canvas truoc
+            //         if (refCanvas.current) {
+            //             refCanvas.current.getContext('2d').clearRect(0, 0, 640, 480)
+            //         }
 
-                    const score = resizeDetections._score
-                    if (score > 0.5) {
-                        if (captureList.length < 5) {
-                            setCaptureList(prevCaptureList => [...prevCaptureList, { face: refWebcam.current.getScreenshot(), score: score }])
-                        }
-                    }
+            //         const score = resizeDetections._score
+            //         if (score > 0.5) {
+            //             if (captureList.length < 5) {
+            //                 setCaptureList(prevCaptureList => [...prevCaptureList, { face: refWebcam.current.getScreenshot(), score: score }])
+            //             }
+            //         }
 
-                    // Ve
-                    faceapi.draw.drawDetections(refCanvas.current, resizeDetections) // Ve o vuong phat hien
-                }
+            //         // Ve
+            //         faceapi.draw.drawDetections(refCanvas.current, resizeDetections) // Ve o vuong phat hien
+            //     }
 
-            }, 700)
-            setTimer(timerPlay)
+            // }, 700)
+            // setTimer(timerPlay)
         }
     }
 
@@ -127,13 +127,10 @@ const Login = ({ setShow }) => {
         if (captureList.length >= 5) {
             setFirstDetection(false)
             setIsLogin(true)
-            clearInterval(timer)        
+            clearInterval(timer)
 
             const bestCapture = getBestCapture(captureList)
             const capture = dataURLtoFile(bestCapture.face, "user_capture_login")
-
-            console.log(capture)
-
 
             if (capture) {
                 const login = async () => {
@@ -142,9 +139,8 @@ const Login = ({ setShow }) => {
                         formData.append("file", capture)
 
                         const res = await axios.post("http://localhost:5000/api/face/predict", formData)
-                        
+
                         setIsLogin(false)
-                        setShow(false)
 
                         console.log(res.data)
 
@@ -160,15 +156,12 @@ const Login = ({ setShow }) => {
     }, [captureList])
 
     return (
-        <div className='register'>
+        <div className='login__wrapper'>
 
             <div className="modal__header">
                 <div className="login__title">
                     <img src={FaceIcon} alt='face-icon'></img>
                     <h2 className='modal__title'><span>Face</span>Login</h2>
-                </div>
-                <div className='modal__close' onClick={() => setShow(false)}>
-                    <i className='bx bx-x'></i>
                 </div>
             </div>
             <div className="modal__body">
@@ -196,6 +189,7 @@ const Login = ({ setShow }) => {
                             audio={false}
                             screenshotFormat="image/jpeg"
                             width={"100%"}
+                            // height={"100%"}
                             videoConstraints={videoConstraints}
                             ref={refWebcam}
                             screenshotQuality={1}

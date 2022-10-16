@@ -6,8 +6,11 @@
   box-sizing: border-box;
 }
 .App{
-  width: 1000px;
+  max-width: 760px;
   margin: 0 auto;  
+  max-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .btn{

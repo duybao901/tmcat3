@@ -7,10 +7,10 @@ import FaceDetail from '../FaceDetail/FaceDetail'
 import axios from 'axios'
 import { toast } from "react-toastify"
 
-const Register = ({ setShow }) => {
+const Register = ({}) => {
 
     const videoConstraints = {
-        height: 260,
+        height: 400,
         facingMode: "user",
         aspectRatio: 1
     };
@@ -204,6 +204,10 @@ const Register = ({ setShow }) => {
     }
 
 
+    const hanldeClosePopup = () => {
+        console.log("Close window")
+    }
+
     return (
         <div className="register__wrapper">
             {
@@ -220,9 +224,6 @@ const Register = ({ setShow }) => {
                 <div className="register__user-name">
                     <input id='username' ref={inputRef} className="modal__username" type="text" onChange={onHandleChange} value={userName} />
                     <label htmlFor='username'><i className='bx bx-pencil'></i></label>
-                </div>
-                <div className='modal__close' onClick={() => setShow(false)}>
-                    <i className='bx bx-x'></i>
                 </div>
             </div>
             <div className="modal__body">
@@ -360,7 +361,7 @@ const Register = ({ setShow }) => {
 
             </div>
             <div className="modal__bottom" style={{ display: "flex", justifyContent: "flex-end" }}>
-                <button style={{ marginRight: "10px" }} className="btn btn--danger" onClick={() => setShow(false)}>Huỷ</button>
+                <button style={{ marginRight: "10px" }} className="btn btn--danger" onClick={hanldeClosePopup}>Huỷ</button>
                 <form onSubmit={handleRegister} encType="multipart/form-data">
                     <button
                         disabled={imageList.length + imageListFile.length === 0 || recoding || loading ? true : false}
