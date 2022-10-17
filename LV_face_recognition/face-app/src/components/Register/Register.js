@@ -128,6 +128,7 @@ const Register = ({ }) => {
         // }
     }
 
+
     function dataURLtoFile(dataurl, filename) {
 
         var arr = dataurl.split(','),
@@ -142,6 +143,8 @@ const Register = ({ }) => {
 
         return new File([u8arr], filename, { type: mime });
     }
+
+
 
     // Register
     const handleRegister = async (e) => {
@@ -193,16 +196,38 @@ const Register = ({ }) => {
                 },
             })
             console.log(res)
-
             setLoading(false)
             toast.success(res.response.data.msg)
-            
+            const fetchedUrl = res.request.responseURL;
+            window.location.href = fetchedUrl
         } catch (error) {
             setLoading(false)
-            console.log(error)
-            // toast.warning(error.response.data.msg)
+            const fetchedUrl = error.request.responseURL;
+            window.location.href = fetchedUrl
         }
- 
+
+        // Example POST method implementation:
+        // async function postData(url = '', data) {
+        //     // Default options are marked with *
+        //     console.log(data)
+        //     const response = await fetch(url, {
+        //         method: 'POST', // *GET, POST, PUT, DELETE, etc.      
+        //         mode: "no-cors",
+        //         headers: {
+        //             'Content-Type': 'multipart/form-data',
+        //             "Access-Control-Allow-Origin": "*"
+        //         },
+        //         redirect: 'follow', // manual, *follow, error        
+        //         body: JSON.stringify(data) // body data type must match "Content-Type" header
+        //     });
+        //     return response.json(); // parses JSON response into native JavaScript objects
+        // }
+
+        // postData('http://localhost:5000/api/face/train', formData)
+        //     .then((data) => {
+        //         console.log(data); // JSON data parsed by `data.json()` call
+        //     });
+
     }
 
     const deleteSample = (i) => {
