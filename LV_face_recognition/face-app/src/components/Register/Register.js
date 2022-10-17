@@ -6,8 +6,11 @@ import FaceIcon from '../../images/face-icon.png'
 import FaceDetail from '../FaceDetail/FaceDetail'
 import axios from 'axios'
 import { toast } from "react-toastify"
+import { useParams } from 'react-router-dom'
 
-const Register = ({}) => {
+const Register = ({ }) => {
+
+    const params = useParams()
 
     const videoConstraints = {
         height: 400,
@@ -29,6 +32,10 @@ const Register = ({}) => {
     const [showFaceDetail, setShowFaceDetail] = useState({})
     const [loading, setLoading] = useState(false)
 
+
+    // REDIRECT
+    const [redirectUrl, setRedirectUrl] = useState()
+
     const onHandleChange = (e) => {
         setUserName(e.target.value)
     }
@@ -38,6 +45,22 @@ const Register = ({}) => {
             inputRef.current.style.width = ((inputRef.current.value.length + 1) * 10) + "px";
         }
     }, [userName])
+
+    useEffect(() => {
+        if (second === 0 && recoding === false) {
+            stopCapture()
+        }
+    }, [second])
+
+    // Hanlde regiser from another web
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search)
+        const redirect_url = params.get("redirect_url");
+        console.log(redirect_url)
+        if (redirect_url) {
+            setRedirectUrl(redirect_url)
+        }
+    }, [])
 
     const capture = () => {
 
@@ -71,12 +94,6 @@ const Register = ({}) => {
 
     }
 
-    useEffect(() => {
-        if (second === 0 && recoding === false) {
-            stopCapture()
-        }
-    }, [second])
-
     const stopCapture = () => {
         setRecording(false)
         clearInterval(autoCapture);
@@ -84,7 +101,7 @@ const Register = ({}) => {
     }
 
     const onHandleChangeFile = (e) => {
-        
+
         const target = e.target
         const files = target.files;
 
@@ -126,14 +143,19 @@ const Register = ({}) => {
         return new File([u8arr], filename, { type: mime });
     }
 
+    // Register
     const handleRegister = async (e) => {
         e.preventDefault();
 
-        const isNullSample = imageList.every(element => element === null);
+        if (!redirectUrl) return;
 
-        if(isNullSample){
-            toast.warning("Một số ảnh không hợp lệ")
-            return;
+        if (imageList.length > 0) {
+            const isNullSample = imageList.every(element => element === null);
+
+            if (isNullSample) {
+                toast.warning("Một số ảnh không hợp lệ")
+                return;
+            }
         }
 
         const newImageListFile = imageList.map(item => {
@@ -158,21 +180,29 @@ const Register = ({}) => {
         // formData.files("files", newListSample)
         // formData.append("files", newListSample);
         formData.append("user_name", userName.trim().toLocaleLowerCase())
+        formData.append("redirect_url", redirectUrl)
 
-        // try {
-        //     setLoading(true)
-        //     const res = await axios.post("http://localhost:5000/api/face/train", formData, {
-        //         headers: {
-        //             'Content-Type': 'multipart/form-data'
-        //         }
-        //     })
-        //     setLoading(false)
-        //     toast.success(res.data.msg)
-        // } catch (error) {
-        //     setLoading(false)
-        //     toast.warning(error.response.data.msg)
-        // }
 
+        try {
+            setLoading(true)
+            const res = await axios.post("http://localhost:5000/api/face/train", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    "Access-Control-Allow-Origin": "*"
+                },
+            })
+            console.log(res)
+
+            setLoading(false)
+            toast.success(res.response.data.msg)
+            
+        } catch (error) {
+            setLoading(false)
+            console.log(error)
+            // toast.warning(error.response.data.msg)
+        }
+ 
     }
 
     const deleteSample = (i) => {
@@ -203,10 +233,11 @@ const Register = ({}) => {
         })
     }
 
-
     const hanldeClosePopup = () => {
         console.log("Close window")
     }
+
+
 
     return (
         <div className="register__wrapper">
@@ -214,11 +245,19 @@ const Register = ({}) => {
                 loading && <div className="register__fade"></div>
             }
             {
-                loading && <div className="register__loading">
-                    <div className="register__loading-circle">
+                loading && <>
+                    <div className="register__loading">
+                        <div className="register__loading-circle">
+                            {
+                                <p>
+                                    Đang đăng kí
+                                </p>
+                            }
+                        </div>
+                        <img src={FaceIcon} alt='face-icon-loading'></img>
+
                     </div>
-                    <img src={FaceIcon} alt='face-icon-loading'></img>
-                </div>
+                </>
             }
             <div className="modal__header">
                 <div className="register__user-name">

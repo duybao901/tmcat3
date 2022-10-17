@@ -1,5 +1,5 @@
 import numpy as np
-from flask import request, Blueprint, jsonify, current_app
+from flask import request, Blueprint, jsonify, current_app, make_response
 from KnnClass import KnnClass 
 import const
 from face_processing import extract_face, datagen, datagen_tf
@@ -46,53 +46,75 @@ def predict():
 def train():
   if request.method == 'POST':
     user_name = request.form['user_name']
+    redirect_url = request.form['redirect_url']
     uploaded_files = request.files.getlist("file")
     faces = []
     label = []
-    
-    for file in uploaded_files:       
-      image_array = extract_face(file, required_size=(160, 160))
-      if len(image_array) >= 1:
-        faces.append(image_array)
-        label.append(user_name)
-      else:
-        return jsonify({"msg": f"File {file.filename} có quá nhiều người", }), 400
-    
-    _, labels = get_faces();
-    
-    if (len(list(filter (lambda x : x == user_name, labels))) > 0):
-      return jsonify({"msg": f"{user_name} đã tồn tại" }), 400
 
-    numberGenerator = 16;
+    response = jsonify()
 
-    if(len(faces) > 6):
-      numberGenerator = 11
+    # _, labels = get_faces();
+    
+    # if (len(list(filter (lambda x : x == user_name, labels))) > 0):
+    #   response = make_response(
+    #       jsonify({"msg": f"{user_name} đã tồn tại"}), 
+    #       301)
+
+    #   response.headers['location'] = redirect_url + f"?error={user_name}-is-exits"
+    #   return response
+    
+    # for file in uploaded_files:       
+    #   image_array = extract_face(file, required_size=(160, 160))
+    #   if len(image_array) >= 1:
+    #     faces.append(image_array)
+    #     label.append(user_name)
+    #   else:
+    #     response = make_response(
+    #       jsonify({"msg": f"File {file.filename} có quá nhiều người"}), 
+    #       301)
+
+    #     response.headers['location'] = redirect_url + f"?error=file-have-many-people"
+    #     return response
+    
+    # numberGenerator = 16;
+
+    # if(len(faces) > 6):
+    #   numberGenerator = 11
           
-    datagen.fit(faces)
-    X_au = []
-    y_au = []
-    for i in np.arange(len(faces)):
-      no_img = 0
-      for x in datagen.flow(np.expand_dims(faces[i], axis = 0), batch_size = 1):
-        X_au.append(x[0])
-        y_au.append(label[i])
-        no_img += 1
-        if no_img == numberGenerator:
-          break
+    # datagen.fit(faces)
+    # X_au = []
+    # y_au = []
+    # for i in np.arange(len(faces)):
+    #   no_img = 0
+    #   for x in datagen.flow(np.expand_dims(faces[i], axis = 0), batch_size = 1):
+    #     X_au.append(x[0])
+    #     y_au.append(label[i])
+    #     no_img += 1
+    #     if no_img == numberGenerator:
+    #       break
 
-    newTrainX = list()
-    for face_pixels in X_au:
-      embedding = Knn.get_embedding(facenet_keras_model, face_pixels)
-      newTrainX.append(embedding)
-    newTrainX = np.asarray(newTrainX)
+    # newTrainX = list()
+    # for face_pixels in X_au:
+    #   embedding = Knn.get_embedding(facenet_keras_model, face_pixels)
+    #   newTrainX.append(embedding)
+    # newTrainX = np.asarray(newTrainX)
 
-    newTrainX = Knn.normalize_input_vectors(newTrainX)
+    # newTrainX = Knn.normalize_input_vectors(newTrainX)
 
     # Add to database
-    for i in range(len(newTrainX)):    
-      add_face(newTrainX[i].tolist() , user_name) 
+    # for i in range(len(newTrainX)):    
+    #   add_face(newTrainX[i].tolist() , user_name) 
 
-    return jsonify({"msg": f"Đăng kí thành công"})
+    
+
+    response = make_response(
+      jsonify({"msg": f"Đăng kí thành công"}), 301)
+
+    # response._status_code = 301
+    response.headers['location'] = redirect_url
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.autocorrect_location_header = False
+    return response
 
 @face_api_v1.route("/init_data", methods=["GET"])
 def init_data():  

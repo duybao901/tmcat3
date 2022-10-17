@@ -5,6 +5,10 @@
   padding: 0;
   box-sizing: border-box;
 }
+body{
+  
+  background-color: #242424;
+}
 .App{
   max-width: 760px;
   margin: 0 auto;  
