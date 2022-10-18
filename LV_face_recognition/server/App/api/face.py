@@ -20,9 +20,12 @@ Knn = KnnClass()
 
 @face_api_v1.route("/predict", methods=["POST"])
 def predict():  
-  if request.method == 'POST':          
+  if request.method == 'POST':    
+    response = jsonify()      
     # Lấy file ảnh người dùng upload lên
     image = request.files["file"]
+    redirect_url = request.form['redirect_url']
+    
     if image:
       # Extract feature
       image_array = extract_face(image, required_size=(160, 160))      
@@ -36,7 +39,16 @@ def predict():
         image_embbeding = Knn.normalize_input_vectors([image_embbeding])  
         # Predict
         y_predict_test = knn_model.predict([image_embbeding[0]])
-        return jsonify({"username": y_predict_test[0]}), 200
+
+        response = make_response(
+              jsonify({"username": y_predict_test[0]}), 301)
+
+        # response._status_code = 301
+        response.headers['location'] = redirect_url + f"?email={y_predict_test[0]}"
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.autocorrect_location_header = False
+        return response
+
       else:
         return jsonify({"msg": "File is so many people", }), 400
     else: 
@@ -111,7 +123,7 @@ def train():
       jsonify({"msg": f"Đăng kí thành công"}), 301)
 
     # response._status_code = 301
-    response.headers['location'] = redirect_url
+    response.headers['location'] = redirect_url + f"?email={user_name}"
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.autocorrect_location_header = False
     return response

@@ -19,6 +19,9 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const [isLogin, setIsLogin] = useState(false)
 
+    // REDIRECT
+    const [redirectUrl, setRedirectUrl] = useState()
+
     const videoConstraints = {
         facingMode: "user",
         aspectRatio: 1
@@ -51,40 +54,40 @@ const Login = () => {
 
     const hanldeCameraPlay = async (e) => {
         if (loadingmodel) {
-            // const timerPlay = setInterval(async () => {
-            //     if (refVideo) {
-            //         refCanvas.current.interHTML = faceapi.createCanvasFromMedia(refVideo)
-            //     }
+            const timerPlay = setInterval(async () => {
+                if (refVideo) {
+                    refCanvas.current.interHTML = faceapi.createCanvasFromMedia(refVideo)
+                }
 
-            //     const displaySize = {
-            //         width: 640, height: 480
-            //     }
-            //     faceapi.matchDimensions(refCanvas.current, displaySize)
+                const displaySize = {
+                    width: 640, height: 480
+                }
+                faceapi.matchDimensions(refCanvas.current, displaySize)
 
-            //     const detection = await faceapi.detectSingleFace(refVideo, new faceapi.SsdMobilenetv1Options)
+                const detection = await faceapi.detectSingleFace(refVideo, new faceapi.SsdMobilenetv1Options)
 
-            //     if (detection) {
-            //         setFirstDetection(true);
-            //         const resizeDetections = faceapi.resizeResults(detection, displaySize)
+                if (detection) {
+                    setFirstDetection(true);
+                    const resizeDetections = faceapi.resizeResults(detection, displaySize)
 
-            //         // Xoa cac canvas truoc
-            //         if (refCanvas.current) {
-            //             refCanvas.current.getContext('2d').clearRect(0, 0, 640, 480)
-            //         }
+                    // Xoa cac canvas truoc
+                    if (refCanvas.current) {
+                        refCanvas.current.getContext('2d').clearRect(0, 0, 640, 480)
+                    }
 
-            //         const score = resizeDetections._score
-            //         if (score > 0.5) {
-            //             if (captureList.length < 5) {
-            //                 setCaptureList(prevCaptureList => [...prevCaptureList, { face: refWebcam.current.getScreenshot(), score: score }])
-            //             }
-            //         }
+                    const score = resizeDetections._score
+                    if (score > 0.5) {
+                        if (captureList.length < 5) {
+                            setCaptureList(prevCaptureList => [...prevCaptureList, { face: refWebcam.current.getScreenshot(), score: score }])
+                        }
+                    }
 
-            //         // Ve
-            //         faceapi.draw.drawDetections(refCanvas.current, resizeDetections) // Ve o vuong phat hien
-            //     }
+                    // Ve
+                    faceapi.draw.drawDetections(refCanvas.current, resizeDetections) // Ve o vuong phat hien
+                }
 
-            // }, 700)
-            // setTimer(timerPlay)
+            }, 700)
+            setTimer(timerPlay)
         }
     }
 
@@ -123,6 +126,16 @@ const Login = () => {
         return bestCapture
     }
 
+    // Hanlde login from another web
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search)
+        const redirect_url = params.get("redirect_url");
+        console.log(redirect_url)
+        if (redirect_url) {
+            setRedirectUrl(redirect_url)
+        }
+    }, [])
+
     useEffect(() => {
         if (captureList.length >= 5) {
             setFirstDetection(false)
@@ -137,17 +150,20 @@ const Login = () => {
                     try {
                         const formData = new FormData();
                         formData.append("file", capture)
+                        formData.append("redirect_url", redirectUrl)
 
                         const res = await axios.post("http://localhost:5000/api/face/predict", formData)
 
                         setIsLogin(false)
 
-                        console.log(res.data)
+                        const fetchedUrl = res.request.responseURL;
+                        window.location.href = fetchedUrl
 
                         toast.success(res.data.username)
 
                     } catch (error) {
-                        console.error(error.response.data.msg)
+                        const fetchedUrl = error.request.responseURL;
+                        window.location.href = fetchedUrl
                     }
                 }
                 login()

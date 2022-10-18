@@ -184,8 +184,7 @@ const Register = ({ }) => {
         // formData.append("files", newListSample);
         formData.append("user_name", userName.trim().toLocaleLowerCase())
         formData.append("redirect_url", redirectUrl)
-
-
+        
         try {
             setLoading(true)
             const res = await axios.post("http://localhost:5000/api/face/train", formData, {
