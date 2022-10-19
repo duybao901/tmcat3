@@ -6,7 +6,7 @@ from face_processing import extract_face, datagen, datagen_tf
 from utils import _load_model
 from sklearn.neighbors import KNeighborsClassifier
 from datetime import datetime
-from App.db import add_face, get_faces, delete_face
+from App.db import add_face, get_faces, delete_face, find_by_username, get_faces_by_username
 from matplotlib import pyplot
 
 face_api_v1 = Blueprint(
@@ -154,22 +154,39 @@ def init_data():
 
 @face_api_v1.route("/get_faces", methods=["GET"])
 def get_face():
-  faces, labels = get_faces()
-  
+  faces, labels = get_faces()  
   return jsonify({"msg":f"Get {len(faces)} success" })
 
-# @face_api_v1.route("/test", methods=["GET"])
-# def delete_face():
-#   return jsonify({"msg":f"hello world" })
-
-@face_api_v1.route("/delete_label", methods=["POST"])
+@face_api_v1.route("/delete_label", methods=["DELETE"])
 def delete_face_label():
-  if request.method == 'POST':    
-    userName = request.form['username']
+  if request.method == 'DELETE':        
+    userName = request.form['username']    
     if userName:    
-      delete_face(userName)     
-      return jsonify({"msg":f"delete {userName} success" }), 200 
+      isExits = find_by_username(userName)
+      if isExits:
+        delete_face(userName)          
+        return jsonify({"msg":f"delete {userName} success" }), 200 
+      return jsonify({"msg":f"{userName} not found" }), 400         
     else:
-      return jsonify({"msg":f"{userName} not found" }), 400   
+      return jsonify({"msg":f"{userName} is required" }), 400 
+
+@face_api_v1.route("/get_faces_by_username", methods=["POST"])
+def get_faces_by_user_name():
+  if request.method == 'POST':        
+    array_face_response = []
+    userName = request.form['username']    
+    if userName:    
+      faces = get_faces_by_username(userName)
+      for face in list(faces):        
+        array_face_response.append({
+          "label": face["label"],
+          "face_embdding":face["face_embdding"]
+        })
+      # print(array_face_response)
+      if faces:            
+        return jsonify({"faces": array_face_response }), 200 
+      return jsonify({"msg":f"{userName} not found" }), 400         
+    else:
+      return jsonify({"msg":f"{userName} is required" }), 400   
 
 

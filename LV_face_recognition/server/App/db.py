@@ -51,3 +51,11 @@ def get_faces():
 def delete_face(face):
     query = {"label":face}
     return db.image_normalizes.delete_many(query)
+
+def find_by_username(username):
+     query = {"label": username}
+     return db.image_normalizes.find_one(query)
+
+def get_faces_by_username(userName):
+    query = {"label": userName}
+    return db.image_normalizes.find(query)

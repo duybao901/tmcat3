@@ -60,7 +60,7 @@ const Login = () => {
                 }
 
                 const displaySize = {
-                    width: 640, height: 480
+                    width: 422, height: 422
                 }
                 faceapi.matchDimensions(refCanvas.current, displaySize)
 
@@ -72,7 +72,7 @@ const Login = () => {
 
                     // Xoa cac canvas truoc
                     if (refCanvas.current) {
-                        refCanvas.current.getContext('2d').clearRect(0, 0, 640, 480)
+                        refCanvas.current.getContext('2d').clearRect(0, 0, 422, 422)
                     }
 
                     const score = resizeDetections._score
@@ -146,27 +146,27 @@ const Login = () => {
             const capture = dataURLtoFile(bestCapture.face, "user_capture_login")
 
             if (capture) {
-                const login = async () => {
-                    try {
-                        const formData = new FormData();
-                        formData.append("file", capture)
-                        formData.append("redirect_url", redirectUrl)
+                // const login = async () => {
+                //     try {
+                //         const formData = new FormData();
+                //         formData.append("file", capture)
+                //         formData.append("redirect_url", redirectUrl)
 
-                        const res = await axios.post("http://localhost:5000/api/face/predict", formData)
+                //         const res = await axios.post("http://localhost:5000/api/face/predict", formData)
 
-                        setIsLogin(false)
+                //         setIsLogin(false)
 
-                        const fetchedUrl = res.request.responseURL;
-                        window.location.href = fetchedUrl
+                //         const fetchedUrl = res.request.responseURL;
+                //         window.location.href = fetchedUrl
 
-                        toast.success(res.data.username)
+                //         toast.success(res.data.username)
 
-                    } catch (error) {
-                        const fetchedUrl = error.request.responseURL;
-                        window.location.href = fetchedUrl
-                    }
-                }
-                login()
+                //     } catch (error) {
+                //         const fetchedUrl = error.request.responseURL;
+                //         window.location.href = fetchedUrl
+                //     }
+                // }
+                // login()
             }
         }
     }, [captureList])

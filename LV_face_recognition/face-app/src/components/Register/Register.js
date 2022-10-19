@@ -10,8 +10,6 @@ import { useParams } from 'react-router-dom'
 
 const Register = ({ }) => {
 
-    const params = useParams()
-
     const videoConstraints = {
         height: 400,
         facingMode: "user",
@@ -21,7 +19,7 @@ const Register = ({ }) => {
     const inputRef = useRef();
     const webcamRef = useRef();
 
-    const [userName, setUserName] = useState("username")
+    const [userName, setUserName] = useState("@gmail.com")
     const [imageList, setImageList] = useState([])
     const [imageListFile, setImageListFile] = useState([])
     const [recoding, setRecording] = useState(false)
@@ -128,7 +126,6 @@ const Register = ({ }) => {
         // }
     }
 
-
     function dataURLtoFile(dataurl, filename) {
 
         var arr = dataurl.split(','),
@@ -144,13 +141,21 @@ const Register = ({ }) => {
         return new File([u8arr], filename, { type: mime });
     }
 
-
+    function validateEmail(email) {
+        var re = /\S+@\S+\.\S+/;
+        return re.test(email);
+      }
 
     // Register
     const handleRegister = async (e) => {
         e.preventDefault();
-
+        
         if (!redirectUrl) return;
+
+        if(!validateEmail(userName)){
+            toast.warning("Email không đúng định dạng")
+            return 
+        }
 
         if (imageList.length > 0) {
             const isNullSample = imageList.every(element => element === null);
@@ -184,49 +189,25 @@ const Register = ({ }) => {
         // formData.append("files", newListSample);
         formData.append("user_name", userName.trim().toLocaleLowerCase())
         formData.append("redirect_url", redirectUrl)
-        
-        try {
-            setLoading(true)
-            const res = await axios.post("http://localhost:5000/api/face/train", formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    "Access-Control-Allow-Origin": "*"
-                },
-            })
-            console.log(res)
-            setLoading(false)
-            toast.success(res.response.data.msg)
-            const fetchedUrl = res.request.responseURL;
-            window.location.href = fetchedUrl
-        } catch (error) {
-            setLoading(false)
-            const fetchedUrl = error.request.responseURL;
-            window.location.href = fetchedUrl
-        }
 
-        // Example POST method implementation:
-        // async function postData(url = '', data) {
-        //     // Default options are marked with *
-        //     console.log(data)
-        //     const response = await fetch(url, {
-        //         method: 'POST', // *GET, POST, PUT, DELETE, etc.      
-        //         mode: "no-cors",
+        // try {
+        //     setLoading(true)
+        //     const res = await axios.post("http://localhost:5000/api/face/train", formData, {
         //         headers: {
         //             'Content-Type': 'multipart/form-data',
+        //             'X-Requested-With': 'XMLHttpRequest',
         //             "Access-Control-Allow-Origin": "*"
         //         },
-        //         redirect: 'follow', // manual, *follow, error        
-        //         body: JSON.stringify(data) // body data type must match "Content-Type" header
-        //     });
-        //     return response.json(); // parses JSON response into native JavaScript objects
+        //     })
+        //     setLoading(false)
+        //     toast.success(res.response.data.msg)
+        //     const fetchedUrl = res.request.responseURL;
+        //     window.location.href = fetchedUrl
+        // } catch (error) {
+        //     setLoading(false)
+        //     const fetchedUrl = error.request.responseURL;
+        //     window.location.href = fetchedUrl
         // }
-
-        // postData('http://localhost:5000/api/face/train', formData)
-        //     .then((data) => {
-        //         console.log(data); // JSON data parsed by `data.json()` call
-        //     });
-
     }
 
     const deleteSample = (i) => {
