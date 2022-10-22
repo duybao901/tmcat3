@@ -30,20 +30,25 @@ print(X_test.shape)
 # print(X_test)
 # print(y_test)
 
-knn_model = KNeighborsClassifier(n_neighbors=3, weights="distance", p=2) 
-knn_model.fit(X_train, y_train)
+for i in range(1,10):
+    print("With n_neighbors = ", i)
+    knn_model = KNeighborsClassifier(n_neighbors=i, weights="distance", p=2) 
+    knn_model.fit(X_train, y_train)
 
-# predict
-y_predict_train = knn_model.predict(X_train)
-y_predict_test = knn_model.predict(X_test)
+    # predict
+    y_predict_train = knn_model.predict(X_train)
+    y_predict_test = knn_model.predict(X_test)
 
-score_train = accuracy_score(y_train, y_predict_train)
-score_test = accuracy_score(y_test, y_predict_test)
+    score_train = accuracy_score(y_train, y_predict_train)
+    score_test = accuracy_score(y_test, y_predict_test)
+    print('Accuracy: train=%.3f, test=%.3f' % (score_train, score_test))
+
+
 # summarize
-print('Accuracy: train=%.3f, test=%.3f' % (score_train, score_test))
+# print('Accuracy: train=%.3f, test=%.3f' % (score_train, score_test))
 
-df = pd.DataFrame(data= {"Y test": y_test, "Y predict test": y_predict_test})
-print(df)
+# df = pd.DataFrame(data= {"Y test": y_test, "Y predict test": y_predict_test})
+# print(df)
 
 
 # # fit model

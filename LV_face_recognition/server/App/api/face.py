@@ -17,7 +17,6 @@ Knn = KnnClass()
 # data = Knn.load_data_after_embedding(const.EMBDDINGS_FOLDER_EMB)
 # X_train, X_test, y_train, y_test = data['arr_0'], data['arr_1'], data['arr_2'], data['arr_3']
 
-
 @face_api_v1.route("/predict", methods=["POST"])
 def predict():  
   if request.method == 'POST':    
@@ -31,7 +30,7 @@ def predict():
       image_array = extract_face(image, required_size=(160, 160))      
       if len(image_array) >= 1:
         faces, label = get_faces();
-        knn_model = KNeighborsClassifier(n_neighbors=3, weights="distance", p=2) 
+        knn_model = KNeighborsClassifier(n_neighbors=10, weights="distance", p=2) 
         knn_model.fit(faces, label) 
         # Embbding face
         image_embbeding = Knn.get_embedding(facenet_keras_model, image_array)    
@@ -65,59 +64,57 @@ def train():
 
     response = jsonify()
 
-    # _, labels = get_faces();
+    _, labels = get_faces();
     
-    # if (len(list(filter (lambda x : x == user_name, labels))) > 0):
-    #   response = make_response(
-    #       jsonify({"msg": f"{user_name} đã tồn tại"}), 
-    #       301)
+    if (len(list(filter (lambda x : x == user_name, labels))) > 0):
+      response = make_response(
+          jsonify({"msg": f"{user_name} đã tồn tại"}), 
+          301)
 
-    #   response.headers['location'] = redirect_url + f"?error={user_name}-is-exits"
-    #   return response
+      response.headers['location'] = redirect_url + f"?error={user_name}-is-exits"
+      return response
     
-    # for file in uploaded_files:       
-    #   image_array = extract_face(file, required_size=(160, 160))
-    #   if len(image_array) >= 1:
-    #     faces.append(image_array)
-    #     label.append(user_name)
-    #   else:
-    #     response = make_response(
-    #       jsonify({"msg": f"File {file.filename} có quá nhiều người"}), 
-    #       301)
+    for file in uploaded_files:       
+      image_array = extract_face(file, required_size=(160, 160))
+      if len(image_array) >= 1:
+        faces.append(image_array)
+        label.append(user_name)
+      else:
+        response = make_response(
+          jsonify({"msg": f"File {file.filename} có quá nhiều người"}), 
+          301)
 
-    #     response.headers['location'] = redirect_url + f"?error=file-have-many-people"
-    #     return response
+        response.headers['location'] = redirect_url + f"?error=file-have-many-people"
+        return response
     
-    # numberGenerator = 16;
+    numberGenerator = 16;
 
-    # if(len(faces) > 6):
-    #   numberGenerator = 11
+    if(len(faces) > 6):
+      numberGenerator = 11
           
-    # datagen.fit(faces)
-    # X_au = []
-    # y_au = []
-    # for i in np.arange(len(faces)):
-    #   no_img = 0
-    #   for x in datagen.flow(np.expand_dims(faces[i], axis = 0), batch_size = 1):
-    #     X_au.append(x[0])
-    #     y_au.append(label[i])
-    #     no_img += 1
-    #     if no_img == numberGenerator:
-    #       break
+    datagen.fit(faces)
+    X_au = []
+    y_au = []
+    for i in np.arange(len(faces)):
+      no_img = 0
+      for x in datagen.flow(np.expand_dims(faces[i], axis = 0), batch_size = 1):
+        X_au.append(x[0])
+        y_au.append(label[i])
+        no_img += 1
+        if no_img == numberGenerator:
+          break
 
-    # newTrainX = list()
-    # for face_pixels in X_au:
-    #   embedding = Knn.get_embedding(facenet_keras_model, face_pixels)
-    #   newTrainX.append(embedding)
-    # newTrainX = np.asarray(newTrainX)
+    newTrainX = list()
+    for face_pixels in X_au:
+      embedding = Knn.get_embedding(facenet_keras_model, face_pixels)
+      newTrainX.append(embedding)
+    newTrainX = np.asarray(newTrainX)
 
-    # newTrainX = Knn.normalize_input_vectors(newTrainX)
+    newTrainX = Knn.normalize_input_vectors(newTrainX)
 
     # Add to database
-    # for i in range(len(newTrainX)):    
-    #   add_face(newTrainX[i].tolist() , user_name) 
-
-    
+    for i in range(len(newTrainX)):    
+      add_face(newTrainX[i].tolist() , user_name) 
 
     response = make_response(
       jsonify({"msg": f"Đăng kí thành công"}), 301)

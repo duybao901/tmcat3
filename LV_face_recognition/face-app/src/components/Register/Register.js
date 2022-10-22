@@ -54,7 +54,6 @@ const Register = ({ }) => {
     useEffect(() => {
         const params = new URLSearchParams(window.location.search)
         const redirect_url = params.get("redirect_url");
-        console.log(redirect_url)
         if (redirect_url) {
             setRedirectUrl(redirect_url)
         }
@@ -190,24 +189,25 @@ const Register = ({ }) => {
         formData.append("user_name", userName.trim().toLocaleLowerCase())
         formData.append("redirect_url", redirectUrl)
 
-        // try {
-        //     setLoading(true)
-        //     const res = await axios.post("http://localhost:5000/api/face/train", formData, {
-        //         headers: {
-        //             'Content-Type': 'multipart/form-data',
-        //             'X-Requested-With': 'XMLHttpRequest',
-        //             "Access-Control-Allow-Origin": "*"
-        //         },
-        //     })
-        //     setLoading(false)
-        //     toast.success(res.response.data.msg)
-        //     const fetchedUrl = res.request.responseURL;
-        //     window.location.href = fetchedUrl
-        // } catch (error) {
-        //     setLoading(false)
-        //     const fetchedUrl = error.request.responseURL;
-        //     window.location.href = fetchedUrl
-        // }
+        try {
+            setLoading(true)
+            const res = await axios.post("http://localhost:5000/api/face/train", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    "Access-Control-Allow-Origin": "*"
+                },
+            })
+            setLoading(false)
+            toast.success(res.response.data.msg)
+            const fetchedUrl = res.request.responseURL;
+            window.location.href = fetchedUrl
+        } catch (error) {
+            setLoading(false)
+            console.log("error::", error)
+            const fetchedUrl = error.request.responseURL;
+            window.location.href = fetchedUrl
+        }
     }
 
     const deleteSample = (i) => {
@@ -241,8 +241,6 @@ const Register = ({ }) => {
     const hanldeClosePopup = () => {
         console.log("Close window")
     }
-
-
 
     return (
         <div className="register__wrapper">

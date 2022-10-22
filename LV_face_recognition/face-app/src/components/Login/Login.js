@@ -18,6 +18,8 @@ const Login = () => {
     const [firstDetection, setFirstDetection] = useState(false)
     const [loading, setLoading] = useState(false);
     const [isLogin, setIsLogin] = useState(false)
+    const [tracks, setTracks] = useState()
+    const [playing, setPlaying] = useState(false)
 
     // REDIRECT
     const [redirectUrl, setRedirectUrl] = useState()
@@ -26,16 +28,19 @@ const Login = () => {
         facingMode: "user",
         aspectRatio: 1
     };
+    
 
+    // Loading model
     useEffect(() => {
         const loadModel = async () => {
             const MODEL_URI = process.env.PUBLIC_URL + '/models'
 
             Promise.all(
                 [
-                    faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URI), // Pre-trained model dùng để phát hiện gương mặt.
-                    // faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URI),
-                    faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URI), // FaceLandmark68Net Model: Pre-trained model dùng để xác định được các điểm xung quanh mặt.
+                    //faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URI), // Pre-trained model dùng để phát hiện gương mặt.
+                    faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URI),
+                    // faceapi.nets.mtcnn.loadFromUri(MODEL_URI),
+                    // faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URI), // FaceLandmark68Net Model: Pre-trained model dùng để xác định được các điểm xung quanh mặt.
                     //   faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URI) // Pre-trained model dùng để nhận dạng gương mặt.
                 ]
             )
@@ -64,9 +69,12 @@ const Login = () => {
                 }
                 faceapi.matchDimensions(refCanvas.current, displaySize)
 
-                const detection = await faceapi.detectSingleFace(refVideo, new faceapi.SsdMobilenetv1Options)
+                const detection = await faceapi.detectSingleFace(refVideo, new faceapi.TinyFaceDetectorOptions)
+
+                console.log({ detection })
 
                 if (detection) {
+
                     setFirstDetection(true);
                     const resizeDetections = faceapi.resizeResults(detection, displaySize)
 
@@ -83,7 +91,7 @@ const Login = () => {
                     }
 
                     // Ve
-                    faceapi.draw.drawDetections(refCanvas.current, resizeDetections) // Ve o vuong phat hien
+                    faceapi.draw.drawDetections(refCanvas.current, resizeDetections) // Ve o vuong phat hien guong mat
                 }
 
             }, 700)
@@ -145,28 +153,28 @@ const Login = () => {
             const bestCapture = getBestCapture(captureList)
             const capture = dataURLtoFile(bestCapture.face, "user_capture_login")
 
+            console.log(captureList)
+
             if (capture) {
-                // const login = async () => {
-                //     try {
-                //         const formData = new FormData();
-                //         formData.append("file", capture)
-                //         formData.append("redirect_url", redirectUrl)
+                const login = async () => {
+                    try {
+                        const formData = new FormData();
+                        formData.append("file", capture)
+                        formData.append("redirect_url", redirectUrl)
 
-                //         const res = await axios.post("http://localhost:5000/api/face/predict", formData)
+                        const res = await axios.post("http://localhost:5000/api/face/predict", formData)
 
-                //         setIsLogin(false)
+                        setIsLogin(false)
 
-                //         const fetchedUrl = res.request.responseURL;
-                //         window.location.href = fetchedUrl
+                        const fetchedUrl = res.request.responseURL;
+                        window.location.href = fetchedUrl
 
-                //         toast.success(res.data.username)
-
-                //     } catch (error) {
-                //         const fetchedUrl = error.request.responseURL;
-                //         window.location.href = fetchedUrl
-                //     }
-                // }
-                // login()
+                    } catch (error) {
+                        const fetchedUrl = error.request.responseURL;
+                        window.location.href = fetchedUrl
+                    }
+                }
+                login()
             }
         }
     }, [captureList])
