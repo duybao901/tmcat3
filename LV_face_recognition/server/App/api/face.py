@@ -30,7 +30,7 @@ def predict():
       image_array = extract_face(image, required_size=(160, 160))      
       if len(image_array) >= 1:
         faces, label = get_faces();
-        knn_model = KNeighborsClassifier(n_neighbors=10, weights="distance", p=2) 
+        knn_model = KNeighborsClassifier(n_neighbors=5, weights="distance", p=2) 
         knn_model.fit(faces, label) 
         # Embbding face
         image_embbeding = Knn.get_embedding(facenet_keras_model, image_array)    

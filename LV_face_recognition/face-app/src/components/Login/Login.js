@@ -35,9 +35,9 @@ const Login = () => {
 
             Promise.all(
                 [
-                    //faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URI), // Pre-trained model dùng để phát hiện gương mặt.
-                    //faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URI),
-                     faceapi.nets.mtcnn.loadFromUri(MODEL_URI),
+                    // faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URI), // Pre-trained model dùng để phát hiện gương mặt.
+                    // faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URI),
+                    faceapi.nets.mtcnn.loadFromUri(MODEL_URI),
                     // faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URI), // FaceLandmark68Net Model: Pre-trained model dùng để xác định được các điểm xung quanh mặt.
                     //   faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URI) // Pre-trained model dùng để nhận dạng gương mặt.
                 ]
@@ -66,9 +66,10 @@ const Login = () => {
                 const displaySize = {
                     width: 422, height: 422
                 }
+                
                 faceapi.matchDimensions(refCanvas.current, displaySize)
 
-                const detection = await faceapi.detectSingleFace(refVideo, new faceapi.MtcnnOptions())
+                const detection = await faceapi.detectSingleFace(refVideo, new faceapi.MtcnnOptions)
 
                 console.log({ detection })
 
@@ -83,7 +84,7 @@ const Login = () => {
                     }
 
                     const score = resizeDetections._score
-                    if (score > 0.5) {
+                    if (score > 0.3) {
                         if (captureList.length < 3) {
                             setCaptureList(prevCaptureList => [...prevCaptureList, { face: refWebcam.current.getScreenshot(), score: score }])
                         }
