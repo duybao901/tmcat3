@@ -1,4 +1,4 @@
-from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
+from keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
 import os
 
 datagen = ImageDataGenerator(

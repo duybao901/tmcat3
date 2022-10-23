@@ -1,4 +1,4 @@
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from keras.preprocessing.image import ImageDataGenerator
 from matplotlib import pyplot
 from numpy import asarray
 from os import listdir

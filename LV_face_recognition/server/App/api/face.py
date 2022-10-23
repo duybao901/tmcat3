@@ -2,7 +2,7 @@ import numpy as np
 from flask import request, Blueprint, jsonify, current_app, make_response
 from KnnClass import KnnClass 
 import const
-from face_processing import extract_face, datagen, datagen_tf
+from face_processing import extract_face, datagen
 from utils import _load_model
 from sklearn.neighbors import KNeighborsClassifier
 from datetime import datetime

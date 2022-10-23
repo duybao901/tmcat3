@@ -8,7 +8,6 @@ from bson import json_util, ObjectId
 from datetime import datetime
 
 from App.api.face import face_api_v1
-from App.db import get_faces
 
 class MongoJsonEncoder(JSONEncoder):
     def default(self, obj):
