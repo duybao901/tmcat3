@@ -4,7 +4,6 @@ import "./Login.css"
 import * as faceapi from 'face-api.js'
 import Webcam from 'react-webcam'
 import axios from 'axios'
-import { toast } from 'react-toastify'
 
 const Login = () => {
 
@@ -16,10 +15,7 @@ const Login = () => {
     const [timer, setTimer] = useState()
     const [captureList, setCaptureList] = useState([])
     const [firstDetection, setFirstDetection] = useState(false)
-    const [loading, setLoading] = useState(false);
     const [isLogin, setIsLogin] = useState(false)
-    const [tracks, setTracks] = useState()
-    const [playing, setPlaying] = useState(false)
 
     // REDIRECT
     const [redirectUrl, setRedirectUrl] = useState()
@@ -34,6 +30,8 @@ const Login = () => {
     useEffect(() => {
         const loadModel = async () => {
             const MODEL_URI = process.env.PUBLIC_URL + '/models'
+
+            console.log("Loading model")
 
             Promise.all(
                 [
@@ -52,6 +50,7 @@ const Login = () => {
 
     useEffect(() => {
         if (refWebcam && loadingmodel) {
+            console.log("set webcam")
             setRefVideo(refWebcam.current.video)
         }
     }, [refWebcam, loadingmodel])
@@ -69,7 +68,7 @@ const Login = () => {
                 }
                 faceapi.matchDimensions(refCanvas.current, displaySize)
 
-                const detection = await faceapi.detectSingleFace(refVideo, new faceapi.MtcnnOptions)
+                const detection = await faceapi.detectSingleFace(refVideo, new faceapi.MtcnnOptions())
 
                 console.log({ detection })
 
@@ -85,7 +84,7 @@ const Login = () => {
 
                     const score = resizeDetections._score
                     if (score > 0.5) {
-                        if (captureList.length < 5) {
+                        if (captureList.length < 3) {
                             setCaptureList(prevCaptureList => [...prevCaptureList, { face: refWebcam.current.getScreenshot(), score: score }])
                         }
                     }
@@ -145,7 +144,7 @@ const Login = () => {
     }, [])
 
     useEffect(() => {
-        if (captureList.length >= 5) {
+        if (captureList.length >= 3) {
             setFirstDetection(false)
             setIsLogin(true)
             clearInterval(timer)
