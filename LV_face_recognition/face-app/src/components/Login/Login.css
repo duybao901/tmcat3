@@ -18,8 +18,8 @@
 }
 .login__webcam canvas{
     position: absolute;
-    width: 422px;
-    height: 422px;
+    width: 462px;
+    height: 273px;
     top: 0;
     left: 0;
 }

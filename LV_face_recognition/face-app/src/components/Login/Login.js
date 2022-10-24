@@ -21,11 +21,11 @@ const Login = () => {
     const [redirectUrl, setRedirectUrl] = useState()
 
     const videoConstraints = {
-        facingMode: "user",
-        aspectRatio: 1
+        width: 1280,
+        height: 720,
+        facingMode: "user"
     };
     
-
     // Loading model
     useEffect(() => {
         const loadModel = async () => {
@@ -36,8 +36,8 @@ const Login = () => {
             Promise.all(
                 [
                     // faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URI), // Pre-trained model dùng để phát hiện gương mặt.
-                    // faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URI),
-                    faceapi.nets.mtcnn.loadFromUri(MODEL_URI),
+                     faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URI),
+                    // faceapi.nets.mtcnn.loadFromUri(MODEL_URI),
                     // faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URI), // FaceLandmark68Net Model: Pre-trained model dùng để xác định được các điểm xung quanh mặt.
                     //   faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URI) // Pre-trained model dùng để nhận dạng gương mặt.
                 ]
@@ -66,10 +66,10 @@ const Login = () => {
                 const displaySize = {
                     width: 422, height: 422
                 }
-                
+
                 faceapi.matchDimensions(refCanvas.current, displaySize)
 
-                const detection = await faceapi.detectSingleFace(refVideo, new faceapi.MtcnnOptions)
+                const detection = await faceapi.detectSingleFace(refVideo, new faceapi.TinyFaceDetectorOptions)
 
                 console.log({ detection })
 
@@ -84,8 +84,8 @@ const Login = () => {
                     }
 
                     const score = resizeDetections._score
-                    if (score > 0.3) {
-                        if (captureList.length < 3) {
+                    if (score > 0.4) {
+                        if (captureList.length < 5) {
                             setCaptureList(prevCaptureList => [...prevCaptureList, { face: refWebcam.current.getScreenshot(), score: score }])
                         }
                     }
@@ -94,7 +94,7 @@ const Login = () => {
                     faceapi.draw.drawDetections(refCanvas.current, resizeDetections) // Ve o vuong phat hien guong mat
                 }
 
-            }, 700)
+            }, 500)
             setTimer(timerPlay)
         }
     }
@@ -145,7 +145,7 @@ const Login = () => {
     }, [])
 
     useEffect(() => {
-        if (captureList.length >= 3) {
+        if (captureList.length >= 5) {
             setFirstDetection(false)
             setIsLogin(true)
             clearInterval(timer)
