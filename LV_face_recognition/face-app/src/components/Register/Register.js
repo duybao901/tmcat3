@@ -62,8 +62,8 @@ const Register = ({ }) => {
     const capture = () => {
 
         const newListSample = imageList.concat(imageListFile)
-        if (newListSample.length >= 8) {
-            toast.warning("Số ảnh phải lớn hơn 4 và tối đa 8 ảnh")
+        if (newListSample.length >= 6) {
+            toast.warning("Số ảnh phải lớn hơn 4 và tối đa 6 ảnh")
             return;
         }
 
@@ -103,8 +103,8 @@ const Register = ({ }) => {
         const files = target.files;
 
         const newListSample = imageList.concat(imageListFile)
-        if (newListSample.length + files.length >= 8) {
-            toast.warning("Số ảnh phải lớn hơn 4 và tối đa 8 ảnh")
+        if (newListSample.length + files.length >= 6) {
+            toast.warning("Số ảnh phải lớn hơn 4 và tối đa 6 ảnh")
             return;
         }
 
@@ -143,7 +143,7 @@ const Register = ({ }) => {
     function validateEmail(email) {
         var re = /\S+@\S+\.\S+/;
         return re.test(email);
-      }
+    }
 
     // Register
     const handleRegister = async (e) => {
@@ -174,8 +174,8 @@ const Register = ({ }) => {
 
         const totalImage = newListSample.length;
 
-        if (totalImage < 4 || totalImage > 8) {
-            toast.warning("Số ảnh phải lớn hơn 4 và tối đa 8 ảnh")
+        if (totalImage < 4 || totalImage > 6) {
+            toast.warning("Số ảnh phải lớn hơn 4 và tối đa 6 ảnh")
             return;
         }
 
@@ -199,12 +199,10 @@ const Register = ({ }) => {
                 },
             })
             setLoading(false)
-            toast.success(res.response.data.msg)
             const fetchedUrl = res.request.responseURL;
             window.location.href = fetchedUrl
         } catch (error) {
             setLoading(false)
-            console.log("error::", error)
             const fetchedUrl = error.request.responseURL;
             window.location.href = fetchedUrl
         }

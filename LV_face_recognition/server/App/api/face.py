@@ -87,11 +87,8 @@ def train():
         response.headers['location'] = redirect_url + f"?error=file-have-many-people"
         return response
     
-    numberGenerator = 16;
-
-    if(len(faces) > 6):
-      numberGenerator = 11
-          
+    numberGenerator = 5;
+    
     datagen.fit(faces)
     X_au = []
     y_au = []

@@ -64,8 +64,8 @@ const Login = () => {
                 }
 
                 const displaySize = {
-                    width: 422, height: 422
-                }
+                    width: 640, height: 480
+                  }
 
                 faceapi.matchDimensions(refCanvas.current, displaySize)
 
@@ -80,12 +80,12 @@ const Login = () => {
 
                     // Xoa cac canvas truoc
                     if (refCanvas.current) {
-                        refCanvas.current.getContext('2d').clearRect(0, 0, 422, 422)
+                        refCanvas.current.getContext('2d').clearRect(0, 0, 640, 480)
                     }
 
                     const score = resizeDetections._score
                     if (score > 0.4) {
-                        if (captureList.length < 5) {
+                        if (captureList.length < 4) {
                             setCaptureList(prevCaptureList => [...prevCaptureList, { face: refWebcam.current.getScreenshot(), score: score }])
                         }
                     }
@@ -145,7 +145,7 @@ const Login = () => {
     }, [])
 
     useEffect(() => {
-        if (captureList.length >= 5) {
+        if (captureList.length >= 4) {
             setFirstDetection(false)
             setIsLogin(true)
             clearInterval(timer)
