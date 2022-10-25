@@ -45,10 +45,10 @@ for i in range(1,10):
 
 
 # summarize
-# print('Accuracy: train=%.3f, test=%.3f' % (score_train, score_test))
+print('Accuracy: train=%.3f, test=%.3f' % (score_train, score_test))
 
-# df = pd.DataFrame(data= {"Y test": y_test, "Y predict test": y_predict_test})
-# print(df)
+df = pd.DataFrame(data= {"Y test": y_test, "Y predict test": y_predict_test})
+print(df)
 
 
 # # fit model

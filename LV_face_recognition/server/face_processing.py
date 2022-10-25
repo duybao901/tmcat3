@@ -8,70 +8,87 @@ import cv2
 
 from PIL import Image # Pillow
 
-# extract faces in filename image
+
+
+# def _blobImage(image, out_size = (160, 160), scaleFactor = 1.0, mean = (104.0, 177.0, 123.0)):
+#     """
+#     input:
+#         image: ma trận RGB của ảnh input
+#         out_size: kích thước ảnh blob
+#     return:
+#         imageBlob: ảnh blob
+#     """
+#     # Chuyển sang blobImage để tránh ảnh bị nhiễu sáng
+#     imageBlob = cv2.dnn.blobFromImage(image, 
+#                                         scalefactor=scaleFactor,   # Scale image
+#                                         size=out_size,  # Output shape
+#                                         mean=mean,  # Trung bình kênh theo RGB
+#                                         swapRB=False,  # Trường hợp ảnh là BGR thì set bằng True để chuyển qua RGB
+#                                         crop=False)
+#   return imageBlob
+
+# trích xuất đặt trưng khuôn mặt từ file ảnh
+# model facenet yêu cầu 160×160 pixels
 def extract_face(filename, required_size=(160, 160)):
     print(filename)
-    # load image from file
+    # tải hình ảnh
     image = Image.open(filename)
-    # convert to RGB, if needed
+    # chuyển đổi sang RGB, nếu cần
     image = image.convert('RGB')
-    # convert to array
-    pixels = asarray(image)
-    # create the detector, using default weights
+    # chuyển đổi sang array
+    pixels = asarray(image)    
+    # tạo đối tượng mtcnn
     detector = MTCNN()
-    # detect faces in the image
+    # phát hiện khuôn mặt trong hình ảnh
     results = detector.detect_faces(pixels)
-
     if len(results) > 1 or results == []:
         return [];
-
-    # extract the bounding box from the first face
+    # trích xuất các giá trị toạ độ (bounding box) từ khuôn mặt 
     x1, y1, width, height = results[0]['box']
-    # bug fix
     x1, y1 = abs(x1), abs(y1)
     x2, y2 = x1 + width, y1 + height
-    # extract the face
+
+    # trích xuất khuôn mặt
     face = pixels[y1:y2, x1:x2]
     
-    # resize pixels to the model size
+    # thay đổi kích thước pixel thành kích thước phù hợp với mô hình
     image = Image.fromarray(face)
     image = image.resize(required_size)
     face_array = asarray(image)
     return face_array
 
-# load images and extract faces for all images in a directory
+# tải hình ảnh và trích xuất khuôn mặt cho tất cả hình ảnh trong một thư mục
 def load_faces(directory):
     faces = list()
-  # enumerate files
+    # liệt kê các ảnh
     for filename in listdir(directory):
-    # path
+        # path
         path = directory + "/" + filename
-        # get face
+        # lấy khuôn mặt
         face = extract_face(path)	
-        		 
         if face != []:
             faces.append(face)
     return faces     
 
-# load a dataset that contains one subdir for each class that in turn contains images
+# Tải thư mục chứa các thư mục con(label) chứa hình ảnh 
 def load_dataset(directory):
     X, y = list(), list()
-    # enumerate folders, on per class
+    # liệt kê các thư mục, trên mỗi lớp
     for subdir in listdir(directory):
         # path
         path = directory + "/" + subdir + '/'
-        # skip any files that might be in the dir
+        # Bỏ qua các phần tử không phải là thư mục
         if not isdir(path):
             continue
         print(path)
-        # load all faces in the subdirectory
+        # tải tất cả các khuôn mặt trong thư mục con
         faces = load_faces(path)
-        # create labels
+        # tạo nhãn
         labels = [subdir for _ in range(len(faces))]
         print(labels)
-        # summarize progress
+        # tóm tắt tiến trình
         print('>loaded %d examples for class: %s' % (len(faces), subdir))
-        # store
+        # lưu
         X.extend(faces)
         y.extend(labels)
     return asarray(X), asarray(y)       

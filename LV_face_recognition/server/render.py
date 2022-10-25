@@ -28,11 +28,10 @@ for i in np.arange(len(X_train)):
     X_au.append(x[0])
     y_au.append(y_train[i])
     no_img += 1
-    if no_img == 6:
+    if no_img == 5:
       break
 
 datagen_tf.fit(X_test)
-
 no_batch = 0
 X_test_tf = []
 for i in np.arange(len(X_test)):
@@ -60,7 +59,5 @@ newTestX = np.asarray(newTestX)
 print(newTestX.shape)
 
 Knn.save_data_after_embedding(const.EMBDDINGS_FOLDER_EMB ,newTrainX, newTestX , y_au, y_test)
-
-
 #######################
 # load dataset embddings from trainings files
