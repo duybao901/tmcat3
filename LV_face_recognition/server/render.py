@@ -28,7 +28,7 @@ for i in np.arange(len(X_train)):
     X_au.append(x[0])
     y_au.append(y_train[i])
     no_img += 1
-    if no_img == 5:
+    if no_img == 8:
       break
 
 datagen_tf.fit(X_test)
