@@ -116,6 +116,9 @@ def train():
     response = make_response(
       jsonify({"msg": f"Đăng kí thành công"}), 301)
 
+    print("user_name", user_name)
+    print("redirect_url", redirect_url)
+
     # response._status_code = 301
     response.headers['location'] = redirect_url + f"?email={user_name}"
     response.headers.add('Access-Control-Allow-Origin', '*')
