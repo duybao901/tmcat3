@@ -42,6 +42,9 @@ def predict():
         response = make_response(
               jsonify({"username": y_predict_test[0]}), 301)
 
+        print("user_name", y_predict_test[0])
+        print("redirect_url", redirect_url)
+
         # response._status_code = 301
         response.headers['location'] = redirect_url + f"?email={y_predict_test[0]}"
         response.headers.add('Access-Control-Allow-Origin', '*')
