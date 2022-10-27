@@ -5,7 +5,7 @@ new_dataset/
 embeddings/
 models/
 face_test/
-
+virtual/
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/flask

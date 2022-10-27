@@ -191,7 +191,7 @@ const Register = ({ }) => {
 
         try {
             setLoading(true)
-            const res = await axios.post("http://0.0.0.0:5000/api/face/train", formData, {
+            const res = await axios.post("http://192.168.1.7:5000/api/face/train", formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'X-Requested-With': 'XMLHttpRequest',
