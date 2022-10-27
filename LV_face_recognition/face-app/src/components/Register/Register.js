@@ -148,12 +148,12 @@ const Register = ({ }) => {
     // Register
     const handleRegister = async (e) => {
         e.preventDefault();
-        
+
         if (!redirectUrl) return;
 
-        if(!validateEmail(userName)){
+        if (!validateEmail(userName)) {
             toast.warning("Email không đúng định dạng")
-            return 
+            return
         }
 
         if (imageList.length > 0) {
@@ -191,7 +191,7 @@ const Register = ({ }) => {
 
         try {
             setLoading(true)
-            const res = await axios.post("http://192.168.1.7:5000/api/face/train", formData, {
+            const res = await axios.post("http://192.168.1.8:5000/api/face/train", formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'X-Requested-With': 'XMLHttpRequest',
@@ -199,11 +199,13 @@ const Register = ({ }) => {
                 },
             })
             setLoading(false)
-            const fetchedUrl = res.request.responseURL;
+            console.log(res)
+            const fetchedUrl = res.data.redirect_url;
             window.location.href = fetchedUrl
+
         } catch (error) {
-            setLoading(false)
-            const fetchedUrl = error.request.responseURL;
+            const fetchedUrl = error.response.data.redirect_url;
+            console.log(error)
             window.location.href = fetchedUrl
         }
     }

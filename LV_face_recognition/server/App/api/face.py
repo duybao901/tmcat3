@@ -40,21 +40,21 @@ def predict():
         y_predict_test = knn_model.predict([image_embbeding[0]])
 
         response = make_response(
-              jsonify({"username": y_predict_test[0]}), 301)
+              jsonify({"email": y_predict_test[0], "redirect_url": redirect_url + f"?email={y_predict_test[0]}"}), 200)
 
-        print("user_name", y_predict_test[0])
-        print("redirect_url", redirect_url)
+        # print("user_name", y_predict_test[0])
+        # print("redirect_url", redirect_url)
 
-        # response._status_code = 301
-        response.headers['location'] = redirect_url + f"?email={y_predict_test[0]}"
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        response.autocorrect_location_header = False
+        # # response._status_code = 301
+        # response.headers['location'] = redirect_url + f"?email={y_predict_test[0]}"
+        # response.headers.add('Access-Control-Allow-Origin', '*')
+        # response.autocorrect_location_header = False
         return response
 
       else:
-        return jsonify({"msg": "File is so many people", }), 400
+        return jsonify({"msg": "File is so many people", "redirect_url": redirect_url + f"?error=file-is-so-many-people" }), 400
     else: 
-      return jsonify({"msg": "File not found", }), 400    
+      return jsonify({"msg": "File not found", "redirect_url": redirect_url + f"?error=file-not-found" }), 400    
 
 @face_api_v1.route("/train", methods=["POST"])
 def train():
@@ -71,10 +71,10 @@ def train():
     
     if (len(list(filter (lambda x : x == user_name, labels))) > 0):
       response = make_response(
-          jsonify({"msg": f"{user_name} đã tồn tại"}), 
-          301)
+          jsonify({"msg": f"{user_name} đã tồn tại",  "redirect_url": redirect_url + f"?error=user-is-exits"}), 
+          400)
 
-      response.headers['location'] = redirect_url + f"?error={user_name}-is-exits"
+      # response.headers['location'] = redirect_url + f"?error={user_name}-is-exits"
       return response
     
     for file in uploaded_files:       
@@ -84,10 +84,10 @@ def train():
         label.append(user_name)
       else:
         response = make_response(
-          jsonify({"msg": f"File {file.filename} có quá nhiều người"}), 
-          301)
+          jsonify({"msg": f"File {file.filename} có quá nhiều người", "redirect_url": redirect_url + f"?error=file-is-so-many-people"}), 
+          400)
 
-        response.headers['location'] = redirect_url + f"?error=file-have-many-people"
+        # response.headers['location'] = redirect_url + f"?error=file-have-many-people"
         return response
     
     numberGenerator = 5;
@@ -117,15 +117,15 @@ def train():
       add_face(newTrainX[i].tolist() , user_name) 
 
     response = make_response(
-      jsonify({"msg": f"Đăng kí thành công"}), 301)
+              jsonify({"email": user_name, "redirect_url": redirect_url + f"?email={user_name}"}), 200)
 
-    print("user_name", user_name)
-    print("redirect_url", redirect_url)
+    # print("user_name", user_name)
+    # print("redirect_url", redirect_url)
 
-    # response._status_code = 301
-    response.headers['location'] = redirect_url + f"?email={user_name}"
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.autocorrect_location_header = False
+    # # response._status_code = 301
+    # response.headers['location'] = redirect_url + f"?email={user_name}"
+    # response.headers.add('Access-Control-Allow-Origin', '*')
+    # response.autocorrect_location_header = False
     return response
 
 @face_api_v1.route("/init_data", methods=["GET"])
@@ -156,6 +156,18 @@ def init_data():
 def get_face():
   faces, labels = get_faces()  
   return jsonify({"msg":f"Get {len(faces)} success" })
+
+@face_api_v1.route("/hello", methods=["GET"])
+def hello():  
+  response = make_response(
+            jsonify({"username": "baoduy"}), 200)
+
+  # response._status_code = 301
+  # response.headers['location'] = "http://192.168.1.8:4000/" + f"?email=baoduy@gmail.com"
+  # response.headers.add('Access-Control-Allow-Origin', '*')
+  # response.autocorrect_location_header = False
+  return response
+  # return jsonify({"msg":f"Hello world" })
 
 @face_api_v1.route("/delete_label", methods=["DELETE"])
 def delete_face_label():
