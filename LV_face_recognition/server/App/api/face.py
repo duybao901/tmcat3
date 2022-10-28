@@ -2,12 +2,11 @@ import numpy as np
 from flask import request, Blueprint, jsonify, current_app, make_response
 from KnnClass import KnnClass 
 import const
-from face_processing import extract_face, datagen
+from face_processing import extract_face, datagen, datagen_tf
 from utils import _load_model
 from sklearn.neighbors import KNeighborsClassifier
 from datetime import datetime
 from App.db import add_face, get_faces, delete_face, find_by_username, get_faces_by_username
-from matplotlib import pyplot
 
 face_api_v1 = Blueprint(
     'face_api_v1', 'face_api_v1', url_prefix='/api/face')
@@ -27,7 +26,11 @@ def predict():
     
     if image:
       # Extract feature
-      image_array = extract_face(image, required_size=(160, 160))      
+      image_array = extract_face(image, required_size=(160, 160))   
+      datagen_tf.fit([image_array])
+      # Data Augumentation
+      X_datagen =  datagen_tf.flow(np.expand_dims(image_array, axis = 0), batch_size = 1)
+      image_array = X_datagen[0][0]
       if len(image_array) >= 1:
         faces, label = get_faces();
         knn_model = KNeighborsClassifier(n_neighbors=5, weights="distance", p=2) 

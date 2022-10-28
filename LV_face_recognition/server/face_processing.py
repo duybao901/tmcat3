@@ -1,31 +1,10 @@
 from keras.preprocessing.image import ImageDataGenerator
-from matplotlib import pyplot
 from numpy import asarray
 from os import listdir
 from os.path import isdir
 from mtcnn.mtcnn import MTCNN
-import cv2
 
 from PIL import Image # Pillow
-
-
-
-# def _blobImage(image, out_size = (160, 160), scaleFactor = 1.0, mean = (104.0, 177.0, 123.0)):
-#     """
-#     input:
-#         image: ma trận RGB của ảnh input
-#         out_size: kích thước ảnh blob
-#     return:
-#         imageBlob: ảnh blob
-#     """
-#     # Chuyển sang blobImage để tránh ảnh bị nhiễu sáng
-#     imageBlob = cv2.dnn.blobFromImage(image, 
-#                                         scalefactor=scaleFactor,   # Scale image
-#                                         size=out_size,  # Output shape
-#                                         mean=mean,  # Trung bình kênh theo RGB
-#                                         swapRB=False,  # Trường hợp ảnh là BGR thì set bằng True để chuyển qua RGB
-#                                         crop=False)
-#   return imageBlob
 
 # trích xuất đặt trưng khuôn mặt từ file ảnh
 # model facenet yêu cầu 160×160 pixels
@@ -93,7 +72,7 @@ def load_dataset(directory):
         y.extend(labels)
     return asarray(X), asarray(y)       
 
-
+# Data
 datagen = ImageDataGenerator(
     featurewise_center=True,
     featurewise_std_normalization=True,
@@ -105,9 +84,6 @@ datagen = ImageDataGenerator(
 datagen_tf = ImageDataGenerator(
     featurewise_center=True,
     featurewise_std_normalization=True,
-    rotation_range=20,
-    # width_shift_range=0.2,
-    # height_shift_range=0.2,
     horizontal_flip=True)
 
 # data = load_faces("./dataset/TRAIN_V8_100p_5i/Bao Dai")

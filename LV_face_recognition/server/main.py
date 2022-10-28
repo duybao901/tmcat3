@@ -30,9 +30,10 @@ print(X_test.shape)
 # print(X_test)
 # print(y_test)
 
-for i in range(1,10):
-    print("With n_neighbors = ", i)
-    knn_model = KNeighborsClassifier(n_neighbors=i, weights="distance", p=2) 
+acc = 0.0
+for i in range(1,11):
+    print(f"With n_neighbors ={i}, weights='distance', p=2")
+    knn_model = KNeighborsClassifier(n_neighbors=i, weights='distance', p=2) 
     knn_model.fit(X_train, y_train)
 
     # predict
@@ -41,8 +42,10 @@ for i in range(1,10):
 
     score_train = accuracy_score(y_train, y_predict_train)
     score_test = accuracy_score(y_test, y_predict_test)
-    print('Accuracy: train=%.3f, test=%.3f' % (score_train, score_test))
+    print('Accuracy: train=%.3f, test=%.3f \n' % (score_train, score_test))
+    acc += score_test
 
+print("\nAccuracy:::\n", acc/10)
 
 # summarize
 print('Accuracy: train=%.3f, test=%.3f' % (score_train, score_test))
