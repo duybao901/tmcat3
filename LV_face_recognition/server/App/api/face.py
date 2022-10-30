@@ -1,7 +1,6 @@
 import numpy as np
 from flask import request, Blueprint, jsonify, current_app, make_response
 from KnnClass import KnnClass 
-import const
 from face_processing import extract_face, datagen, datagen_tf
 from utils import _load_model
 from sklearn.neighbors import KNeighborsClassifier
@@ -11,7 +10,9 @@ from App.db import add_face, get_faces, delete_face, find_by_username, get_faces
 face_api_v1 = Blueprint(
     'face_api_v1', 'face_api_v1', url_prefix='/api/face')
 
+
 facenet_keras_model = _load_model()
+
 Knn = KnnClass()
 # data = Knn.load_data_after_embedding(const.EMBDDINGS_FOLDER_EMB)
 # X_train, X_test, y_train, y_test = data['arr_0'], data['arr_1'], data['arr_2'], data['arr_3']
@@ -44,7 +45,8 @@ def predict():
 
         response = make_response(
               jsonify({"email": y_predict_test[0], "redirect_url": redirect_url + f"?email={y_predict_test[0]}"}), 200)
-
+        # response = make_response(
+        #       jsonify({"email": "a", "redirect_url": redirect_url + f"?email=a"}), 200)
         # print("user_name", y_predict_test[0])
         # print("redirect_url", redirect_url)
 

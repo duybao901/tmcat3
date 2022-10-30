@@ -1,14 +1,12 @@
 import const
 import pandas as pd
 import KnnClass
-from keras.models import load_model
 from sklearn.metrics import accuracy_score
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from KnnClass import KnnClass 
 import numpy as np
 
-model = load_model("./models/facenet_keras.h5")
 Knn = KnnClass()
 data = Knn.load_data_after_embedding(const.EMBDDINGS_FOLDER_EMB)
 
@@ -69,5 +67,5 @@ print(df)
 # # summarize
 # print('Accuracy: train=%.3f, test=%.3f' % (score_train, score_test))
 
-# df = pd.DataFrame(data= {"Y train": y_train, "Y test": y_test})
-# print(df)
+# # df = pd.DataFrame(data= {"Y train": y_train, "Y test": y_test})
+# # print(df)

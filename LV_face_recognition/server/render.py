@@ -1,10 +1,25 @@
-from keras.models import load_model
+# from keras.models import load_model
 import const
 from face_processing import datagen, datagen_tf
 import numpy as np
 from KnnClass import KnnClass
+from keras_vggface.vggface import VGGFace
+from utils import _load_model
+
 ########################################################################
-model = load_model("./models/facenet_keras.h5")
+
+# # Facenet model
+model = _load_model()
+# # summarize input and output shape
+# print(model.inputs)
+# print(model.outputs)
+
+# Vggface2 model
+# create a vggface2 model
+# model = VGGFace(model='resnet50')
+# print('Inputs: %s' % model.inputs)
+# print('Outputs: %s' % model.outputs)
+
 Knn = KnnClass()
 trainX, trainy = Knn.load_training_dataset(const.DATASET_FOLDER)
 Knn.saving_traning_dataset_after_extract_feature(const.EMBDDINGS_FOLDER_EXT, trainX, trainy)
@@ -28,7 +43,7 @@ for i in np.arange(len(X_train)):
     X_au.append(x[0])
     y_au.append(y_train[i])
     no_img += 1
-    if no_img == 8:
+    if no_img == 6:
       break
 
 datagen_tf.fit(X_test)
