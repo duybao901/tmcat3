@@ -1,6 +1,8 @@
 from tensorflow import keras
 import tensorflow as tf
 from keras import backend as K
+from keras_vggface.vggface import VGGFace
+import keras_vggface
 
 config = tf.compat.v1.ConfigProto(
     device_count={'GPU': 1},
@@ -19,6 +21,18 @@ def _load_model():
     facenet_keras_model = keras.models.load_model("./models/facenet_keras.h5")
     return facenet_keras_model
 
+def _load_model_vggface2():
+    # check version of keras_vggface
+    # print version
+    print("keras_vggface.__version__ :",keras_vggface.__version__)
+    model = VGGFace(model='resnet50')
+    # summarize input and output shape
+    print('Inputs: %s' % model.inputs)
+    print('Outputs: %s' % model.outputs)
+    return model
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# _load_model_vggface2()

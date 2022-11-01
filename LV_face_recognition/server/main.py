@@ -4,8 +4,7 @@ import KnnClass
 from sklearn.metrics import accuracy_score
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
-from KnnClass import KnnClass 
-import numpy as np
+from KnnClass import KnnClass
 
 Knn = KnnClass()
 data = Knn.load_data_after_embedding(const.EMBDDINGS_FOLDER_EMB)
@@ -46,26 +45,26 @@ for i in range(1,11):
 print("\nAccuracy:::\n", acc/10)
 
 # summarize
-print('Accuracy: train=%.3f, test=%.3f' % (score_train, score_test))
+print('KNN Accuracy: train=%.3f, test=%.3f' % (score_train, score_test))
 
-df = pd.DataFrame(data= {"Y test": y_test, "Y predict test": y_predict_test})
+#df = pd.DataFrame(data= {"Y test": y_test, "Y predict test": y_predict_test})
+#print(df)
+
+
+# fit model
+svm_model = SVC(kernel='linear', probability=True)
+svm_model.fit(X_train, y_train )
+
+
+# predict
+y_predict_train = svm_model.predict(X_train)
+y_predict_test = svm_model.predict(X_test)
+
+score_train = accuracy_score(y_train, y_predict_train)
+score_test = accuracy_score(y_test, y_predict_test)
+
+# summarize
+print('SVM Accuracy: train=%.3f, test=%.3f' % (score_train, score_test))
+
+df = pd.DataFrame(data= {"Y train": y_predict_test, "Y test": y_test})
 print(df)
-
-
-# # fit model
-# svm_model = SVC(kernel='linear', probability=True)
-# svm_model.fit(X_train, y_train )
-
-
-# # predict
-# y_predict_train = svm_model.predict(X_train)
-# y_predict_test = svm_model.predict(X_test)
-
-# score_train = accuracy_score(y_train, y_predict_train)
-# score_test = accuracy_score(y_test, y_predict_test)
-
-# # summarize
-# print('Accuracy: train=%.3f, test=%.3f' % (score_train, score_test))
-
-# # df = pd.DataFrame(data= {"Y train": y_train, "Y test": y_test})
-# # print(df)

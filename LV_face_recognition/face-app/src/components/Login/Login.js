@@ -162,7 +162,7 @@ const Login = () => {
                         formData.append("file", capture)
                         formData.append("redirect_url", redirectUrl)
 
-                        const res = await axios.post("http://192.168.1.8:5000/api/face/predict", formData)
+                        const res = await axios.post("http://192.168.1.9:5000/api/face/predict", formData)
 
                         setIsLogin(false)
 

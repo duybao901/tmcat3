@@ -6,7 +6,6 @@ import FaceIcon from '../../images/face-icon.png'
 import FaceDetail from '../FaceDetail/FaceDetail'
 import axios from 'axios'
 import { toast } from "react-toastify"
-import { useParams } from 'react-router-dom'
 
 const Register = ({ }) => {
 
@@ -63,7 +62,7 @@ const Register = ({ }) => {
 
         const newListSample = imageList.concat(imageListFile)
         if (newListSample.length >= 6) {
-            toast.warning("Số ảnh phải lớn hơn 4 và tối đa 6 ảnh")
+            toast.warning("Số ảnh phải lớn hơn 6 và tối đa 8 ảnh")
             return;
         }
 
@@ -103,8 +102,8 @@ const Register = ({ }) => {
         const files = target.files;
 
         const newListSample = imageList.concat(imageListFile)
-        if (newListSample.length + files.length >= 6) {
-            toast.warning("Số ảnh phải lớn hơn 4 và tối đa 6 ảnh")
+        if (newListSample.length + files.length >= 8) {
+            toast.warning("Số ảnh phải lớn hơn 6 và tối đa 8 ảnh")
             return;
         }
 
@@ -174,8 +173,8 @@ const Register = ({ }) => {
 
         const totalImage = newListSample.length;
 
-        if (totalImage < 4 || totalImage > 6) {
-            toast.warning("Số ảnh phải lớn hơn 4 và tối đa 6 ảnh")
+        if (totalImage < 6 || totalImage > 8) {
+            toast.warning("Số ảnh phải lớn hơn 6 và tối đa 8 ảnh")
             return;
         }
 
@@ -191,7 +190,7 @@ const Register = ({ }) => {
 
         try {
             setLoading(true)
-            const res = await axios.post("http://192.168.1.8:5000/api/face/train", formData, {
+            const res = await axios.post("http://192.168.1.9:5000/api/face/train", formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'X-Requested-With': 'XMLHttpRequest',

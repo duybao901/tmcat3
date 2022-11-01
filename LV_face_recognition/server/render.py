@@ -4,7 +4,7 @@ from face_processing import datagen, datagen_tf
 import numpy as np
 from KnnClass import KnnClass
 from keras_vggface.vggface import VGGFace
-from utils import _load_model
+from utils import _load_model, _load_model_vggface2
 
 ########################################################################
 
@@ -16,7 +16,7 @@ model = _load_model()
 
 # Vggface2 model
 # create a vggface2 model
-# model = VGGFace(model='resnet50')
+# model = _load_model_vggface2()
 # print('Inputs: %s' % model.inputs)
 # print('Outputs: %s' % model.outputs)
 
