@@ -1,6 +1,5 @@
 import numpy as np
 from numpy import load, savez_compressed, expand_dims
-from keras.models import load_model
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import Normalizer
 from face_processing import load_dataset
