@@ -3,7 +3,7 @@ import const
 from face_processing import datagen, datagen_tf
 import numpy as np
 from KnnClass import KnnClass
-from utils import _load_model, _load_model_vggface2
+from utils import _load_model
 from datetime import datetime
 
 ########################################################################
@@ -57,7 +57,7 @@ for i in np.arange(len(X_train)):
     X_au.append(x[0])
     y_au.append(y_train[i])
     no_img += 1
-    if no_img == 15:
+    if no_img == 6:
       break
 
 datagen_tf.fit(X_test)
@@ -100,5 +100,5 @@ print(dt_string)
 print("AFTER EMBEDDING extract_feature::::::::::::::::::::\n")
 
 Knn.save_data_after_embedding(const.EMBDDINGS_FOLDER_EMB ,newTrainX, newTestX , y_au, y_test)
-#######################
-# load dataset embddings from trainings files
+#####################
+# load dataset embddings from trainings files 

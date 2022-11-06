@@ -12,7 +12,7 @@ import cv2
 # Using MTCNN
 # tạo đối tượng mtcnn
 detector = MTCNN()
-def extract_face_mtcnn(filename, required_size=(160, 160)):
+def extract_face_mtcnn(filename, required_size=(224, 224)):
     print(filename)
     # tải hình ảnh
     image = Image.open(filename)
