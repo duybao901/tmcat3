@@ -19,10 +19,10 @@ ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 # Khoi tao model
 def _load_model():
-    facenet_keras_model = keras.models.load_model("./models/facenet_self_train_triplot_500.h5", compile=False)
+    facenet_keras_model = keras.models.load_model("./models/facenet_keras.h5", compile=False)
     return facenet_keras_model
 
-_load_model()
+# _load_model()
 # def _load_model_vggface2():
 #     # check version of keras_vggface
 #     # print version

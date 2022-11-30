@@ -1,7 +1,7 @@
 import numpy as np
 from flask import request, Blueprint, jsonify, current_app, make_response
 from KnnClass import KnnClass 
-from face_processing import extract_face, datagen, datagen_tf
+from face_processing import extract_face_mtcnn, datagen, datagen_tf
 from utils import _load_model
 from sklearn.neighbors import KNeighborsClassifier
 from datetime import datetime
@@ -17,7 +17,7 @@ Knn = KnnClass()
 # data = Knn.load_data_after_embedding(const.EMBDDINGS_FOLDER_EMB)
 # X_train, X_test, y_train, y_test = data['arr_0'], data['arr_1'], data['arr_2'], data['arr_3']
 
-@face_api_v1.route("/predict", methods=["POST"])
+@face_api_v1.route("/login", methods=["POST"])
 def predict():  
   if request.method == 'POST':    
     response = jsonify()      
@@ -27,7 +27,7 @@ def predict():
     
     if image:
       # Extract feature
-      image_array = extract_face(image, required_size=(160, 160))   
+      image_array = extract_face_mtcnn(image, required_size=(160, 160))   
       datagen_tf.fit([image_array])
       # Data Augumentation
       X_datagen =  datagen_tf.flow(np.expand_dims(image_array, axis = 0), batch_size = 1)
@@ -61,7 +61,7 @@ def predict():
     else: 
       return jsonify({"msg": "File not found", "redirect_url": redirect_url + f"?error=file-not-found" }), 400    
 
-@face_api_v1.route("/train", methods=["POST"])
+@face_api_v1.route("/register", methods=["POST"])
 def train():
   if request.method == 'POST':
     user_name = request.form['user_name']
@@ -95,7 +95,7 @@ def train():
         # response.headers['location'] = redirect_url + f"?error=file-have-many-people"
         return response
     
-    numberGenerator = 5;
+    numberGenerator = 8;
     
     datagen.fit(faces)
     X_au = []
@@ -174,7 +174,7 @@ def hello():
   return response
   # return jsonify({"msg":f"Hello world" })
 
-@face_api_v1.route("/delete_label", methods=["DELETE"])
+@face_api_v1.route("/delete_user", methods=["DELETE"])
 def delete_face_label():
   if request.method == 'DELETE':        
     userName = request.form['username']    
@@ -187,7 +187,7 @@ def delete_face_label():
     else:
       return jsonify({"msg":f"{userName} is required" }), 400 
 
-@face_api_v1.route("/get_faces_by_username", methods=["POST"])
+@face_api_v1.route("/get_faces_by_email", methods=["POST"])
 def get_faces_by_user_name():
   if request.method == 'POST':        
     array_face_response = []

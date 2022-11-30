@@ -3,7 +3,7 @@ from PIL import Image # Pillow
 from numpy import asarray
 
 face_cascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
-file = "./dataset/TRAIN_VN_20p_V1_6_8i/1/1.png"
+file = "./dataset/TRAIN_VN_500p_6_8i/1020/0.png"
 
 # tải hình ảnh
 image = Image.open(file)
