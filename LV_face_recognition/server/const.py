@@ -6,6 +6,6 @@ USING_DATASET = "TRAIN_VN_MAIN_100p_15i"
 # EMBDDINGS_FOLDER_EMB = "./embeddings/" + USING_DATASET + "_emb.npz"
 
 DATASET_FOLDER = "./dataset/" + USING_DATASET
-EMBDDINGS_FOLDER_EXT = "./embeddings/facenet/" + "TRAIN_VN_MAIN_100p_15i_8g_haar" + "_ext.npz"
-EMBDDINGS_FOLDER_EMB = "./embeddings/facenet/" + "TRAIN_VN_MAIN_100p_15i_8g_haar" + "_emb.npz"
+EMBDDINGS_FOLDER_EXT = "./embeddings/facenet/" + "TRAIN_VN_MAIN_100p_15i_8g_mtcnn" + "_ext.npz"
+EMBDDINGS_FOLDER_EMB = "./embeddings/facenet/" + "TRAIN_VN_MAIN_100p_15i_8g_mtcnn" + "_emb.npz"
 

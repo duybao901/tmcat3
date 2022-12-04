@@ -102,7 +102,7 @@ const Register = ({ }) => {
         const files = target.files;
 
         const newListSample = imageList.concat(imageListFile)
-        if (newListSample.length + files.length >= 8) {
+        if (newListSample.length + files.length > 8) {
             toast.warning("Số ảnh phải lớn hơn 6 và tối đa 8 ảnh")
             return;
         }
@@ -190,7 +190,7 @@ const Register = ({ }) => {
 
         try {
             setLoading(true)
-            const res = await axios.post("http://192.168.1.9:5000/api/face/train", formData, {
+            const res = await axios.post("http://192.168.1.12:5000/api/face/register", formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'X-Requested-With': 'XMLHttpRequest',

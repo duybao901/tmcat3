@@ -83,7 +83,7 @@ def train():
       return response
     
     for file in uploaded_files:       
-      image_array = extract_face(file, required_size=(160, 160))
+      image_array = extract_face_mtcnn(file, required_size=(160, 160))
       if len(image_array) >= 1:
         faces.append(image_array)
         label.append(user_name)
@@ -95,7 +95,7 @@ def train():
         # response.headers['location'] = redirect_url + f"?error=file-have-many-people"
         return response
     
-    numberGenerator = 8;
+    numberGenerator = 4;
     
     datagen.fit(faces)
     X_au = []

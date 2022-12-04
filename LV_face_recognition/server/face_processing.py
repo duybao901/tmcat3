@@ -4,6 +4,10 @@ from os import listdir
 from os.path import isdir
 from mtcnn.mtcnn import MTCNN
 
+# Dlib
+import dlib
+from dlib_face_detector import convert_and_trim_bb
+
 from PIL import Image # Pillow
 import cv2
 
@@ -38,6 +42,7 @@ def extract_face_mtcnn(filename, required_size=(160, 160)):
     face_array = asarray(image)
     return face_array
 
+# HAAR 
 face_cascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 def extract_face_haar(filename, required_size=(160, 160)):
     print(filename)
@@ -83,7 +88,38 @@ def extract_face_haar(filename, required_size=(160, 160)):
         face_array = asarray(image)
         print("face_array shape return",face_array.shape)
         return face_array
+
+# Dlib 
+dlib_detector = dlib.get_frontal_face_detector()
+def extract_face_dlib(filename, required_size=(160, 160)):
+    print(filename)
+    # tải hình ảnh
+    image = Image.open(filename)
+    # chuyển đổi sang RGB, nếu cần
+    image = image.convert('RGB')
+    # chuyển đổi sang array
+    pixels = asarray(image) 
+    rects = dlib_detector(pixels)
+    print(rects)
+    print(len(rects))
+    print(rects == [])
+    if len(rects) > 1 or rects == [] or len(rects) == 0:
+        return [];
+
+    boxes = convert_and_trim_bb(pixels, rects[0])
+    # loop over the bounding boxes
+    (x1, y1, width, height) = boxes
+    x1, y1 = abs(x1), abs(y1)   
+    x2, y2 = x1 + width, y1 + height
+    # trích xuất khuôn mặt    
+    face = pixels[y1:y2, x1:x2]
+    image = Image.fromarray(face)
+    image = image.resize(required_size)
+    face_array = asarray(image)
+    print("face_array shape return",face_array.shape)
+    return face_array
     
+#######################################################################################################
 
 # tải hình ảnh và trích xuất khuôn mặt cho tất cả hình ảnh trong một thư mục
 def load_faces(directory):
@@ -93,7 +129,7 @@ def load_faces(directory):
         # path
         path = directory + "/" + filename
         # lấy khuôn mặt
-        face = extract_face_mtcnn(path)	
+        face = extract_face_dlib(path)	
         if face != [] and face is not None:
             faces.append(face)
     return faces     
